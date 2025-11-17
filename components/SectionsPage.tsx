@@ -236,7 +236,7 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                             </div>
                                             <div className="flex items-end space-x-2">
                                                 <div className="flex-1">
-                                                    <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Hours</label>
+                                                    <label className="block text-xs font-medium text-gray-600 mb-1">Suggested Hours</label>
                                                     <input
                                                         type="number"
                                                         value={task.estimateHours}
@@ -246,7 +246,7 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                                     />
                                                 </div>
                                                 <div className="flex-1">
-                                                    <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Cost ($)</label>
+                                                    <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Cost ($)/Hr</label>
                                                     <input
                                                         type="number"
                                                         value={task.estimateCost}
@@ -288,7 +288,7 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                                         </div>
                                                         <div className="flex items-end space-x-2">
                                                             <div className="flex-1">
-                                                                <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Hours</label>
+                                                                <label className="block text-xs font-medium text-gray-600 mb-1">Suggested Hours</label>
                                                                 <input
                                                                     type="number"
                                                                     value={task.estimateHours}
@@ -298,7 +298,7 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                                                 />
                                                             </div>
                                                              <div className="flex-1">
-                                                                <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Cost ($)</label>
+                                                                <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Cost ($)/Hr</label>
                                                                 <input
                                                                     type="number"
                                                                     value={task.estimateCost}

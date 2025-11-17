@@ -4,7 +4,9 @@ import DashboardPage from './components/DashboardPage';
 import CustomerPortal from './components/CustomerPortal';
 import CustomerDashboardPage from './components/CustomerDashboardPage';
 import CoachCompleteProfilePage from './components/CoachCompleteProfilePage';
-import { CustomerData } from './types';
+import { CustomerData, Project } from './types';
+import { initialProjects as initialProjectTemplates } from './data/initialProjects';
+
 
 type CoachOnboardingStep = 'completeProfile' | null;
 interface SignUpData {
@@ -22,6 +24,10 @@ const App: React.FC = () => {
   const [isCustomerLoggedIn, setIsCustomerLoggedIn] = useState(false);
   const [showCustomerPortal, setShowCustomerPortal] = useState(false);
   const [customerData, setCustomerData] = useState<CustomerData | null>(null);
+
+  // Shared state
+  const [projectTemplates, setProjectTemplates] = useState<Project[]>(initialProjectTemplates);
+
 
   // Coach/Designer handlers
   const handleLogin = useCallback(() => {
@@ -64,10 +70,10 @@ const App: React.FC = () => {
 
   // Render logic
   if (isLoggedIn) {
-    return <DashboardPage onLogout={handleLogout} />;
+    return <DashboardPage onLogout={handleLogout} projectTemplates={projectTemplates} setProjectTemplates={setProjectTemplates} />;
   }
   if (isCustomerLoggedIn) {
-    return <CustomerDashboardPage customer={customerData} onLogout={handleCustomerLogout} />;
+    return <CustomerDashboardPage customer={customerData} onLogout={handleCustomerLogout} projectTemplates={projectTemplates} />;
   }
   if (coachOnboardingStep === 'completeProfile' && coachSignUpData) {
     return <CoachCompleteProfilePage initialData={coachSignUpData} onComplete={handleCoachProfileComplete} />;

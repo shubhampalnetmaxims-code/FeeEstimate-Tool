@@ -20,8 +20,9 @@ export interface Category {
 export interface SectionTask {
   id: string;
   name: string;
-  estimateHours: number;
-  estimateCost: number;
+  estimateHours: number; // Suggested Hours
+  estimateCost: number; // Cost Per Hour
+  actualHours?: number; // User-estimated hours
   isNew?: boolean;
 }
 export interface SectionSubcategory {
@@ -58,4 +59,20 @@ export interface CustomerData {
     experience?: number;
     specializations?: string[];
     bio?: string;
+}
+
+// Project Management
+export interface ProjectStage {
+  id: string;
+  name: string;
+  sections: Section[]; // These are deep copies with editable tasks
+}
+
+export interface Project {
+  id: string;
+  name: string;
+  clientAddress: string;
+  projectType: string;
+  projectDescription: string;
+  stages: ProjectStage[];
 }

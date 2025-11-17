@@ -235,7 +235,7 @@ const EditSectionModal: React.FC<EditSectionModalProps> = ({ onClose, onSave, ca
                                             </div>
                                             <div className="flex items-end space-x-2">
                                                 <div className="flex-1">
-                                                    <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Hours</label>
+                                                    <label className="block text-xs font-medium text-gray-600 mb-1">Suggested Hours</label>
                                                     <input
                                                         type="number"
                                                         value={task.estimateHours}
@@ -245,7 +245,7 @@ const EditSectionModal: React.FC<EditSectionModalProps> = ({ onClose, onSave, ca
                                                     />
                                                 </div>
                                                 <div className="flex-1">
-                                                    <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Cost ($)</label>
+                                                    <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Cost ($)/Hr</label>
                                                     <input
                                                         type="number"
                                                         value={task.estimateCost}
@@ -268,7 +268,7 @@ const EditSectionModal: React.FC<EditSectionModalProps> = ({ onClose, onSave, ca
                                 {catContent.subcategories.map((sub, subIndex) => (
                                     <div key={sub.id} className="p-4 bg-white rounded-md border ml-4 space-y-2">
                                         <div className="flex items-center space-x-2">
-                                            <input type="text" value={sub.name} readOnly className="flex-grow px-3 py-2 border-gray-300 bg-gray-100 text-gray-900 rounded-md font-semibold" />
+                                            <input type="text" value={sub.name} readOnly className="flex-grow px-3 py-2 border border-gray-300 bg-white text-gray-900 rounded-md font-semibold cursor-not-allowed" />
                                             <button onClick={() => handleRemoveSubcategory(catContent.categoryId, sub.id)} className="p-2 text-red-500 hover:bg-red-100 rounded-md"><TrashIcon className="h-5 w-5" /></button>
                                         </div>
                                         <div className="pl-4 space-y-2">
@@ -287,7 +287,7 @@ const EditSectionModal: React.FC<EditSectionModalProps> = ({ onClose, onSave, ca
                                                         </div>
                                                         <div className="flex items-end space-x-2">
                                                             <div className="flex-1">
-                                                                <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Hours</label>
+                                                                <label className="block text-xs font-medium text-gray-600 mb-1">Suggested Hours</label>
                                                                 <input
                                                                     type="number"
                                                                     value={task.estimateHours}
@@ -297,7 +297,7 @@ const EditSectionModal: React.FC<EditSectionModalProps> = ({ onClose, onSave, ca
                                                                 />
                                                             </div>
                                                              <div className="flex-1">
-                                                                <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Cost ($)</label>
+                                                                <label className="block text-xs font-medium text-gray-600 mb-1">Estimate Cost ($)/Hr</label>
                                                                 <input
                                                                     type="number"
                                                                     value={task.estimateCost}

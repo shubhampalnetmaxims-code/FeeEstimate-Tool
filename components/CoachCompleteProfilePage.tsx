@@ -37,31 +37,31 @@ const CoachCompleteProfilePage: React.FC<CoachCompleteProfilePageProps> = ({ ini
                     <form onSubmit={handleSubmit} className="space-y-4 text-left">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                            <input type="text" value={initialData.name} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500" />
+                            <input type="text" value={initialData.name} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-500 cursor-not-allowed" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                            <input type="email" value={initialData.email} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500" />
+                            <input type="email" value={initialData.email} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-500 cursor-not-allowed" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                            <input type="tel" placeholder="+1 (555) 123-4567" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                            <input type="tel" placeholder="+1 (555) 123-4567" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Business/Brand Name</label>
-                            <input type="text" placeholder="e.g., 'Creative Spaces Inc.'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" />
+                            <input type="text" placeholder="e.g., 'Creative Spaces Inc.'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Location (City, Country)</label>
-                            <input type="text" placeholder="e.g., 'New York, USA'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                            <input type="text" placeholder="e.g., 'New York, USA'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Languages Spoken</label>
-                            <input type="text" placeholder="e.g., 'English, Spanish'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                            <input type="text" placeholder="e.g., 'English, Spanish'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
                         </div>
                          <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Years of professional experience</label>
-                            <input type="number" min="0" placeholder="e.g., 5" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                            <input type="number" min="0" placeholder="e.g., 5" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
                         </div>
                         
                         <div>
@@ -85,7 +85,7 @@ const CoachCompleteProfilePage: React.FC<CoachCompleteProfilePageProps> = ({ ini
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Profile Bio (50-200 words)</label>
-                            <textarea rows={4} placeholder="Describe your design philosophy and unique selling points..." className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                            <textarea rows={4} placeholder="Describe your design philosophy and unique selling points..." className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 bg-white focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
                         </div>
                         <div className="pt-2">
                             <button type="submit" className="w-full bg-[#5F716B] text-white font-semibold py-3 rounded-lg hover:bg-[#4E5C57] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5F716B] transition-all duration-300 ease-in-out">

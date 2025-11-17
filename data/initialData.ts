@@ -82,8 +82,8 @@ export const initialCategories: Category[] = [
 
 
 // Helper to generate IDs and default values
-const newId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-const deepCopy = <T,>(obj: T): T => JSON.parse(JSON.stringify(obj));
+export const newId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+export const deepCopy = <T,>(obj: T): T => JSON.parse(JSON.stringify(obj));
 
 const createSectionContent = (categoryIds: string[]): SectionContentItem[] => {
     return initialCategories

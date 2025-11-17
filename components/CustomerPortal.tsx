@@ -22,8 +22,8 @@ const FormButton: React.FC<{ children: React.ReactNode, onClick?: () => void }> 
 );
 
 const LoginView = ({ onSwitchToSignUp, onSwitchToForgot, onLoginSuccess }: { onSwitchToSignUp: () => void; onSwitchToForgot: () => void; onLoginSuccess: (data: CustomerData) => void; }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('shubham@gmail.com');
+    const [password, setPassword] = useState('Shubham@123');
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
 
@@ -171,31 +171,31 @@ const CompleteProfileView = ({ initialData, onComplete }: { initialData: SignUpD
             <form onSubmit={handleSubmit} className="space-y-4 text-left">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input type="text" value={initialData.name} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500" />
+                    <input type="text" value={initialData.name} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-500 cursor-not-allowed" />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                    <input type="email" value={initialData.email} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100 text-gray-500" />
+                    <input type="email" value={initialData.email} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-500 cursor-not-allowed" />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                    <input type="tel" placeholder="+1 (555) 123-4567" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <input type="tel" placeholder="+1 (555) 123-4567" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" required />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Business/Brand Name</label>
-                    <input type="text" placeholder="e.g., 'Creative Spaces Inc.'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" />
+                    <input type="text" placeholder="e.g., 'Creative Spaces Inc.'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Location (City, Country)</label>
-                    <input type="text" placeholder="e.g., 'New York, USA'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <input type="text" placeholder="e.g., 'New York, USA'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" required />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Languages Spoken</label>
-                    <input type="text" placeholder="e.g., 'English, Spanish'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <input type="text" placeholder="e.g., 'English, Spanish'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" required />
                 </div>
                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Years of professional experience</label>
-                    <input type="number" min="0" placeholder="e.g., 5" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <input type="number" min="0" placeholder="e.g., 5" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" required />
                 </div>
                 
                 <div>
@@ -219,7 +219,7 @@ const CompleteProfileView = ({ initialData, onComplete }: { initialData: SignUpD
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Profile Bio (50-200 words)</label>
-                    <textarea rows={4} placeholder="Describe your design philosophy and unique selling points..." className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <textarea rows={4} placeholder="Describe your design philosophy and unique selling points..." className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" required />
                 </div>
                 <div className="pt-2">
                     <FormButton>Complete Profile & Enter Portal</FormButton>
