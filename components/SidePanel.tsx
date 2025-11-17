@@ -1,5 +1,5 @@
 import React from 'react';
-import { HomeIcon, ListBulletIcon, ViewColumnsIcon, UsersIcon, CogIcon, LogoutIcon, FolderIcon } from './common/Icons';
+import { HomeIcon, ListBulletIcon, ViewColumnsIcon, UsersIcon, CogIcon, LogoutIcon, FolderIcon, TagIcon } from './common/Icons';
 
 interface SidePanelProps {
     onLogout: () => void;
@@ -12,6 +12,7 @@ const SidePanel: React.FC<SidePanelProps> = ({ onLogout, activeView, setActiveVi
         { icon: HomeIcon, label: 'Dashboard' },
         { icon: ListBulletIcon, label: 'Category Mngmt' },
         { icon: ViewColumnsIcon, label: 'Sections' },
+        { icon: TagIcon, label: 'Project Types' },
         { icon: FolderIcon, label: 'Project Templates' },
         { icon: UsersIcon, label: 'Clients' },
         { icon: CogIcon, label: 'Settings' },

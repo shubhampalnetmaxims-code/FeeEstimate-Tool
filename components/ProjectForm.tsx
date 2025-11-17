@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Project, ProjectStage, Section, Category, SectionTask, SectionContentItem } from '../types';
+import { Project, ProjectStage, Section, Category, SectionTask, SectionContentItem, ProjectType } from '../types';
 import { PlusIcon, TrashIcon } from './common/Icons';
 
 interface ProjectFormProps {
@@ -8,6 +8,7 @@ interface ProjectFormProps {
     onCancel: () => void;
     categories: Category[];
     sections: Section[];
+    projectTypes?: ProjectType[];
 }
 
 const newId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -45,7 +46,7 @@ const calculateOverallTotal = (project: Project) => {
 };
 
 
-const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel, categories, sections }) => {
+const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel, categories, sections, projectTypes }) => {
     const [project, setProject] = useState<Project>(
         initialData ? deepCopy(initialData) : {
             id: newId('proj'),
@@ -115,78 +116,128 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
         }));
     };
 
-    const handleTaskChange = (stageId: string, sectionId: string, contentIndex: number, taskIndex: number, subcategoryIndex: number | null, field: keyof SectionTask, value: string | number) => {
-        setProject(prevProject => {
-            const newProject = deepCopy(prevProject);
-            const stage = newProject.stages.find(s => s.id === stageId);
-            if (!stage) return newProject;
-            const section = stage.sections.find(s => s.id === sectionId);
-            if (!section) return newProject;
-    
-            const targetTask = subcategoryIndex === null
-                ? section.content[contentIndex].tasks[taskIndex]
-                : section.content[contentIndex].subcategories[subcategoryIndex].tasks[taskIndex];
-    
-            if (field === 'actualHours') {
-                const numValue = parseFloat(String(value));
-                targetTask[field] = isNaN(numValue) ? undefined : numValue;
-            } else if (field === 'estimateCost') {
-                const numValue = parseFloat(String(value));
-                targetTask[field] = isNaN(numValue) ? 0 : numValue;
-            }
-            else {
-                targetTask[field] = value as never;
-            }
-            return newProject;
-        });
+    const handleTaskChange = (stageId: string, sectionId: string, contentIndex: number, taskIndex: number, subcategoryIndex: number | null, field: keyof SectionTask, value: any) => {
+        setProject(prevProject => ({
+            ...prevProject,
+            stages: prevProject.stages.map(stage => {
+                if (stage.id !== stageId) return stage;
+                return {
+                    ...stage,
+                    sections: stage.sections.map(section => {
+                        if (section.id !== sectionId) return section;
+                        
+                        const newContent = section.content.map((contentItem, cIdx) => {
+                            if (cIdx !== contentIndex) return contentItem;
+
+                            if (subcategoryIndex === null) { // Task is directly under category
+                                const newTasks = contentItem.tasks.map((task, tIdx) => {
+                                    if (tIdx !== taskIndex) return task;
+                                    return { ...task, [field]: value };
+                                });
+                                return { ...contentItem, tasks: newTasks };
+                            } else { // Task is under a subcategory
+                                const newSubcategories = contentItem.subcategories.map((sub, sIdx) => {
+                                    if (sIdx !== subcategoryIndex) return sub;
+                                    const newTasks = sub.tasks.map((task, tIdx) => {
+                                        if (tIdx !== taskIndex) return task;
+                                        return { ...task, [field]: value };
+                                    });
+                                    return { ...sub, tasks: newTasks };
+                                });
+                                return { ...contentItem, subcategories: newSubcategories };
+                            }
+                        });
+                        return { ...section, content: newContent };
+                    })
+                };
+            })
+        }));
     };
     
     const handleAddTask = (stageId: string, sectionId: string, contentIndex: number, subcategoryIndex: number | null) => {
         const newTask: SectionTask = { id: newId('task'), name: '', estimateHours: 0, estimateCost: 0, actualHours: undefined };
-         setProject(prevProject => {
-            const newProject = deepCopy(prevProject);
-            const stage = newProject.stages.find(s => s.id === stageId);
-            if (!stage) return newProject;
-            const section = stage.sections.find(s => s.id === sectionId);
-            if (!section) return newProject;
-
-            if (subcategoryIndex === null) {
-                section.content[contentIndex].tasks.push(newTask);
-            } else {
-                section.content[contentIndex].subcategories[subcategoryIndex].tasks.push(newTask);
-            }
-            return newProject;
-        });
+        setProject(prevProject => ({
+            ...prevProject,
+            stages: prevProject.stages.map(stage => {
+                if (stage.id !== stageId) return stage;
+                return {
+                    ...stage,
+                    sections: stage.sections.map(section => {
+                        if (section.id !== sectionId) return section;
+                        const newContent = [...section.content];
+                        if (subcategoryIndex === null) {
+                            newContent[contentIndex] = {
+                                ...newContent[contentIndex],
+                                tasks: [...newContent[contentIndex].tasks, newTask]
+                            };
+                        } else {
+                            const newSubcategories = [...newContent[contentIndex].subcategories];
+                            newSubcategories[subcategoryIndex] = {
+                                ...newSubcategories[subcategoryIndex],
+                                tasks: [...newSubcategories[subcategoryIndex].tasks, newTask]
+                            };
+                            newContent[contentIndex] = {
+                                ...newContent[contentIndex],
+                                subcategories: newSubcategories
+                            };
+                        }
+                        return { ...section, content: newContent };
+                    })
+                };
+            })
+        }));
     };
 
     const handleDeleteTask = (stageId: string, sectionId: string, contentIndex: number, taskId: string, subcategoryIndex: number | null) => {
-         setProject(prevProject => {
-            const newProject = deepCopy(prevProject);
-            const stage = newProject.stages.find(s => s.id === stageId);
-            if (!stage) return newProject;
-            const section = stage.sections.find(s => s.id === sectionId);
-            if (!section) return newProject;
-
-            if (subcategoryIndex === null) {
-                section.content[contentIndex].tasks = section.content[contentIndex].tasks.filter(t => t.id !== taskId);
-            } else {
-                section.content[contentIndex].subcategories[subcategoryIndex].tasks = section.content[contentIndex].subcategories[subcategoryIndex].tasks.filter(t => t.id !== taskId);
-            }
-            return newProject;
-        });
+        setProject(prevProject => ({
+            ...prevProject,
+            stages: prevProject.stages.map(stage => {
+                if (stage.id !== stageId) return stage;
+                return {
+                    ...stage,
+                    sections: stage.sections.map(section => {
+                        if (section.id !== sectionId) return section;
+                        const newContent = [...section.content];
+                        if (subcategoryIndex === null) {
+                            newContent[contentIndex] = {
+                                ...newContent[contentIndex],
+                                tasks: newContent[contentIndex].tasks.filter(t => t.id !== taskId)
+                            };
+                        } else {
+                             const newSubcategories = [...newContent[contentIndex].subcategories];
+                            newSubcategories[subcategoryIndex] = {
+                                ...newSubcategories[subcategoryIndex],
+                                tasks: newSubcategories[subcategoryIndex].tasks.filter(t => t.id !== taskId)
+                            };
+                            newContent[contentIndex] = {
+                                ...newContent[contentIndex],
+                                subcategories: newSubcategories
+                            };
+                        }
+                        return { ...section, content: newContent };
+                    })
+                };
+            })
+        }));
     };
     
     const handleDeleteCategoryFromSection = (stageId: string, sectionId: string, categoryId: string) => {
-        setProject(prevProject => {
-            const newProject = deepCopy(prevProject);
-            const stage = newProject.stages.find(s => s.id === stageId);
-            if (!stage) return newProject;
-            const section = stage.sections.find(s => s.id === sectionId);
-            if (!section) return newProject;
-
-            section.content = section.content.filter(c => c.categoryId !== categoryId);
-            return newProject;
-        });
+        setProject(prevProject => ({
+            ...prevProject,
+            stages: prevProject.stages.map(stage => {
+                if (stage.id !== stageId) return stage;
+                return {
+                    ...stage,
+                    sections: stage.sections.map(section => {
+                        if (section.id !== sectionId) return section;
+                        return {
+                            ...section,
+                            content: section.content.filter(c => c.categoryId !== categoryId)
+                        };
+                    })
+                };
+            })
+        }));
     };
 
     const handleAddCategoryToSection = (stageId: string, sectionId: string, categoryIdToAdd: string) => {
@@ -228,19 +279,25 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
         onSave(project);
     };
 
-    const TaskRow = ({ task, onTaskChange, onDeleteTask }: { task: SectionTask, onTaskChange: (field: keyof SectionTask, value: string | number) => void, onDeleteTask: () => void }) => (
+    const handleNumericInputChange = (value: string): number | undefined => {
+        if (value === '') return undefined;
+        const num = parseFloat(value);
+        return isNaN(num) || num < 0 ? 0 : num;
+    };
+
+    const TaskRow = ({ task, onTaskChange, onDeleteTask }: { task: SectionTask, onTaskChange: (field: keyof SectionTask, value: any) => void, onDeleteTask: () => void }) => (
         <div className="grid grid-cols-12 gap-2 items-center p-2 rounded-md hover:bg-gray-50">
             <div className="col-span-4">
                 <input type="text" value={task.name} onChange={e => onTaskChange('name', e.target.value)} className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-900" placeholder="Task Name"/>
             </div>
-            <div className="col-span-2 text-center text-sm text-gray-800">
-                {task.estimateHours}
+            <div className="col-span-2">
+                 <input type="number" min="0" value={task.estimateHours ?? ''} onChange={e => onTaskChange('estimateHours', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-center bg-white text-gray-900" placeholder="Hours"/>
             </div>
             <div className="col-span-2">
-                <input type="number" value={task.estimateCost} onChange={e => onTaskChange('estimateCost', Number(e.target.value))} className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-center bg-white text-gray-900" placeholder="Cost"/>
+                <input type="number" min="0" value={task.estimateCost ?? ''} onChange={e => onTaskChange('estimateCost', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-center bg-white text-gray-900" placeholder="Cost"/>
             </div>
             <div className="col-span-2">
-                <input type="number" value={task.actualHours ?? ''} onChange={e => onTaskChange('actualHours', e.target.value)} className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-center bg-white text-gray-900" placeholder="Hours"/>
+                <input type="number" min="0" value={task.actualHours ?? ''} onChange={e => onTaskChange('actualHours', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-center bg-white text-gray-900" placeholder="Hours"/>
             </div>
             <div className="col-span-1 text-center font-semibold text-sm text-gray-800">
                 ${calculateTaskTotal(task).toFixed(2)}
@@ -255,23 +312,41 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
         <div className="space-y-6 pb-24">
             <header className="mb-8">
                  <h1 className="text-3xl font-bold text-gray-800">
-                    {initialData ? 'Edit Project' : 'Create New Project'}
+                    {initialData ? 'Edit Project Template' : 'Create New Project Template'}
                  </h1>
             </header>
             <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Project Name *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Template Name *</label>
                         <input type="text" value={project.name} onChange={e => handleInputChange('name', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900" />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Client Address</label>
-                        <input type="text" value={project.clientAddress} onChange={e => handleInputChange('clientAddress', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900" />
+                         <label className="block text-sm font-medium text-gray-700 mb-1">Project Type</label>
+                        {projectTypes ? (
+                             <select
+                                value={project.projectType}
+                                onChange={e => handleInputChange('projectType', e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900"
+                            >
+                                <option value="">-- Select a project type --</option>
+                                {projectTypes.map(pt => (
+                                    <option key={pt.id} value={pt.name}>{pt.name}</option>
+                                ))}
+                            </select>
+                        ) : (
+                            <input 
+                                type="text" 
+                                value={project.projectType} 
+                                onChange={e => handleInputChange('projectType', e.target.value)} 
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900" 
+                            />
+                        )}
                     </div>
                 </div>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Project Type</label>
-                    <input type="text" value={project.projectType} onChange={e => handleInputChange('projectType', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900" />
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Client Address</label>
+                    <input type="text" value={project.clientAddress} onChange={e => handleInputChange('clientAddress', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900" />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Project Description</label>
@@ -325,9 +400,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                                             </div>
                                              <div className="grid grid-cols-12 gap-2 items-center mt-2 pl-2 pr-2 md:pl-6 md:pr-4 text-xs font-bold text-gray-500 uppercase">
                                                 <div className="col-span-4">Task Name</div>
-                                                <div className="col-span-2 text-center">Suggested Hours</div>
+                                                <div className="col-span-2 text-center">Estimated Hours</div>
                                                 <div className="col-span-2 text-center">Cost/Hr ($)</div>
-                                                <div className="col-span-2 text-center">Estimate Hours</div>
+                                                <div className="col-span-2 text-center">Actual Hours</div>
                                                 <div className="col-span-1 text-center">Total ($)</div>
                                                 <div className="col-span-1"></div>
                                             </div>
@@ -408,7 +483,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                         </div>
                         <div className="flex items-center ml-8">
                             <button onClick={onCancel} className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md mr-2 hover:bg-gray-50">Cancel</button>
-                            <button onClick={handleSubmit} className="px-6 py-2 text-white bg-[#5F716B] rounded-md hover:bg-[#4E5C57]">Save Project</button>
+                            <button onClick={handleSubmit} className="px-6 py-2 text-white bg-[#5F716B] rounded-md hover:bg-[#4E5C57]">Save</button>
                         </div>
                     </div>
                 </div>

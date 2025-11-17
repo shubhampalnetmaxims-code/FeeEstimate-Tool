@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CustomerData, Project } from '../types';
+import { CustomerData, Project, ProjectType } from '../types';
 import CustomerSidePanel from './CustomerSidePanel';
 import CustomerProfilePage from './CustomerProfilePage';
 import ProjectsPage from './ProjectsPage';
@@ -10,9 +10,10 @@ interface CustomerDashboardPageProps {
   onLogout: () => void;
   customer: CustomerData | null;
   projectTemplates: Project[];
+  projectTypes: ProjectType[];
 }
 
-const CustomerDashboardPage: React.FC<CustomerDashboardPageProps> = ({ onLogout, customer, projectTemplates }) => {
+const CustomerDashboardPage: React.FC<CustomerDashboardPageProps> = ({ onLogout, customer, projectTemplates, projectTypes }) => {
   const [activeView, setActiveView] = useState('Projects');
   const [projects, setProjects] = useState<Project[]>([]);
 
@@ -26,6 +27,7 @@ const CustomerDashboardPage: React.FC<CustomerDashboardPageProps> = ({ onLogout,
                   sections={initialSections} 
                   isCustomerView={true}
                   projectTemplates={projectTemplates}
+                  projectTypes={projectTypes}
                 />;
       case 'Profile':
       default:

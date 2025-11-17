@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Category, Project, Section } from '../types';
+import { Category, Project, Section, ProjectType } from '../types';
 import ProjectForm from './ProjectForm';
 import { PlusIcon, PencilIcon, TrashIcon, EyeIcon } from './common/Icons';
 import ConfirmationModal from './common/ConfirmationModal';
@@ -16,9 +16,10 @@ interface ProjectsPageProps {
   sections: Section[];
   isCustomerView?: boolean;
   projectTemplates?: Project[];
+  projectTypes?: ProjectType[];
 }
 
-const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, setProjects, categories, sections, isCustomerView = false, projectTemplates = [] }) => {
+const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, setProjects, categories, sections, isCustomerView = false, projectTemplates = [], projectTypes }) => {
     const [view, setView] = useState<'list' | 'form' | 'view'>('list');
     const [editingProject, setEditingProject] = useState<Project | null>(null);
     const [viewingProject, setViewingProject] = useState<Project | null>(null);
@@ -110,6 +111,7 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, setProjects, cate
                 onCancel={handleBackToList}
                 categories={categories}
                 sections={sections}
+                projectTypes={projectTypes}
             />
         );
     }
@@ -125,6 +127,7 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, setProjects, cate
                     isOpen={isCreateModalOpen} 
                     onClose={() => setIsCreateModalOpen(false)}
                     templates={projectTemplates}
+                    projectTypes={projectTypes}
                     onComplete={handleStartProject}
                 />
             )}

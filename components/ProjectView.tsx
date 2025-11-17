@@ -114,7 +114,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onBack }) => {
                                                     <thead className="bg-gray-100 text-xs text-gray-500 uppercase">
                                                         <tr>
                                                             <th className="py-2 px-4 font-semibold">Task Name</th>
-                                                            <th className="py-2 px-4 font-semibold text-center">Suggested Hrs</th>
+                                                            <th className="py-2 px-4 font-semibold text-center">Estimated Hrs</th>
                                                             <th className="py-2 px-4 font-semibold text-center">Cost/Hr</th>
                                                             <th className="py-2 px-4 font-semibold text-center">Actual Hrs</th>
                                                             <th className="py-2 px-4 font-semibold text-center">Total</th>

@@ -76,3 +76,9 @@ export interface Project {
   projectDescription: string;
   stages: ProjectStage[];
 }
+
+// Admin Management
+export interface ProjectType {
+  id: string;
+  name: string;
+}

@@ -1,4 +1,12 @@
-import { Category, Section, SectionContentItem } from '../types';
+import { Category, Section, SectionContentItem, ProjectType } from '../types';
+
+export const initialProjectTypes: ProjectType[] = [
+  { id: 'pt-1', name: 'Residential Renovation' },
+  { id: 'pt-2', name: 'Commercial Fit-out' },
+  { id: 'pt-3', name: 'New Build Styling' },
+  { id: 'pt-4', name: 'Hospitality Design' },
+  { id: 'pt-5', name: 'Landscape Design' },
+];
 
 export const initialCategories: Category[] = [
   {

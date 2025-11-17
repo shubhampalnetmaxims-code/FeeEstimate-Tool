@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { initialCategories, initialSections } from '../data/initialData';
-import { Category, Section, Project } from '../types';
+import { Category, Section, Project, ProjectType } from '../types';
 import SidePanel from './SidePanel';
 import CategoryManagementPage from './CategoryManagementPage';
 import SectionsPage from './SectionsPage';
 import UnderConstructionPage from './UnderConstructionPage';
 import ProjectsPage from './ProjectsPage';
+import ProjectTypesPage from './ProjectTypesPage';
 
 
 // --- Main Dashboard Component ---
@@ -13,9 +14,11 @@ interface DashboardPageProps {
   onLogout: () => void;
   projectTemplates: Project[];
   setProjectTemplates: React.Dispatch<React.SetStateAction<Project[]>>;
+  projectTypes: ProjectType[];
+  setProjectTypes: React.Dispatch<React.SetStateAction<ProjectType[]>>;
 }
 
-const DashboardPage: React.FC<DashboardPageProps> = ({ onLogout, projectTemplates, setProjectTemplates }) => {
+const DashboardPage: React.FC<DashboardPageProps> = ({ onLogout, projectTemplates, setProjectTemplates, projectTypes, setProjectTypes }) => {
   const [activeView, setActiveView] = useState('Project Templates');
   const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [sections, setSections] = useState<Section[]>(initialSections);
@@ -24,6 +27,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onLogout, projectTemplate
     'Dashboard': 'Welcome back, Admin!',
     'Category Mngmt': 'Organize your project structure and tasks.',
     'Sections': 'Create and manage project sections from your categories.',
+    'Project Types': 'Define the types of projects you offer.',
     'Project Templates': 'Manage templates for new client projects.',
     'Clients': 'Manage your client information.',
     'Settings': 'Configure application settings.'
@@ -35,8 +39,10 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onLogout, projectTemplate
         return <CategoryManagementPage categories={categories} setCategories={setCategories} />;
       case 'Sections':
         return <SectionsPage categories={categories} setCategories={setCategories} sections={sections} setSections={setSections} />;
+      case 'Project Types':
+        return <ProjectTypesPage projectTypes={projectTypes} setProjectTypes={setProjectTypes} />;
       case 'Project Templates':
-        return <ProjectsPage projects={projectTemplates} setProjects={setProjectTemplates} categories={categories} sections={sections} />;
+        return <ProjectsPage projects={projectTemplates} setProjects={setProjectTemplates} categories={categories} sections={sections} projectTypes={projectTypes} />;
       case 'Dashboard':
       case 'Clients':
       case 'Settings':
