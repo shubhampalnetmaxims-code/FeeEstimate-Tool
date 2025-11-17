@@ -44,13 +44,15 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ onLogout }) => {
     <div className="flex bg-gray-50">
       <SidePanel onLogout={onLogout} activeView={activeView} setActiveView={setActiveView} />
       <main className="flex-1 p-10 overflow-auto h-screen">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">
-            {activeView}
-          </h1>
-          <p className="text-gray-500 mt-1">
-            {viewDescriptions[activeView]}
-          </p>
+        <header className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-800">
+              {activeView}
+            </h1>
+            <p className="text-gray-500 mt-1">
+              {viewDescriptions[activeView]}
+            </p>
+          </div>
         </header>
         {renderActiveView()}
       </main>

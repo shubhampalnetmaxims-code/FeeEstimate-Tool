@@ -46,3 +46,16 @@ export interface Section {
 export type CategoryTaskFormData = Omit<CategoryTask, 'id'> & { id?: string };
 export type CategorySubcategoryFormData = Omit<CategorySubcategory, 'id' | 'tasks'> & { id?: string, tasks: CategoryTaskFormData[] };
 export type CategoryFormData = Omit<Category, 'id' | 'subcategories' | 'tasks'> & { id?: string, tasks: CategoryTaskFormData[], subcategories: CategorySubcategoryFormData[] };
+
+// Customer Data
+export interface CustomerData {
+    name: string;
+    email: string;
+    phone?: string;
+    businessName?: string;
+    location?: string;
+    languages?: string;
+    experience?: number;
+    specializations?: string[];
+    bio?: string;
+}
