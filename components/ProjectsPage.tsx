@@ -111,6 +111,7 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, setProjects, cate
                 onCancel={handleBackToList}
                 categories={categories}
                 sections={sections}
+                isCustomerView={isCustomerView}
                 projectTypes={projectTypes}
             />
         );
@@ -166,7 +167,7 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, setProjects, cate
                                 <li key={project.id} className="py-4 flex justify-between items-center">
                                     <div>
                                         <p className="text-lg font-semibold text-gray-800">{project.name}</p>
-                                        <p className="text-sm text-gray-500">{isCustomerView ? project.clientAddress : project.projectType}</p>
+                                        <p className="text-sm text-gray-500">{project.projectType}</p>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <button onClick={() => handleView(project)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="View"><EyeIcon className="h-5 w-5"/></button>

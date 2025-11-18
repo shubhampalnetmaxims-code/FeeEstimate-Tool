@@ -9,6 +9,7 @@ interface ProjectFormProps {
     categories: Category[];
     sections: Section[];
     projectTypes?: ProjectType[];
+    isCustomerView?: boolean;
 }
 
 const newId = (prefix: string) => `${prefix}-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -46,7 +47,7 @@ const calculateOverallTotal = (project: Project) => {
 };
 
 
-const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel, categories, sections, projectTypes }) => {
+const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel, categories, sections, projectTypes, isCustomerView = false }) => {
     const [project, setProject] = useState<Project>(
         initialData ? deepCopy(initialData) : {
             id: newId('proj'),
@@ -323,7 +324,14 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                     </div>
                     <div>
                          <label className="block text-sm font-medium text-gray-700 mb-1">Project Type</label>
-                        {projectTypes ? (
+                        {isCustomerView ? (
+                            <input 
+                                type="text" 
+                                value={project.projectType} 
+                                readOnly
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700 cursor-not-allowed" 
+                            />
+                        ) : projectTypes ? (
                              <select
                                 value={project.projectType}
                                 onChange={e => handleInputChange('projectType', e.target.value)}
