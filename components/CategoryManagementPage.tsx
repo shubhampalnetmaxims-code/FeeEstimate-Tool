@@ -12,8 +12,7 @@ interface CategoryManagementPageProps {
 
 const CategoryManagementPage: React.FC<CategoryManagementPageProps> = ({ categories, setCategories }) => {
     const [searchTerm, setSearchTerm] = useState('');
-    const [view, setView] = useState<'list' | 'view'>('list');
-    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+    const [expandedCategoryId, setExpandedCategoryId] = useState<string | null>(null);
     const [modal, setModal] = useState<{ type: string | null, payload?: any }>({ type: null });
 
     const handleSaveCategory = (data: Category) => {
@@ -33,24 +32,14 @@ const CategoryManagementPage: React.FC<CategoryManagementPageProps> = ({ categor
         setModal({ type: null });
     };
     
-    const handleViewCategory = (category: Category) => {
-        setSelectedCategory(category);
-        setView('view');
-    };
-
-    const handleBackToList = () => {
-        setSelectedCategory(null);
-        setView('list');
+    const handleToggleExpand = (categoryId: string) => {
+        setExpandedCategoryId(prevId => (prevId === categoryId ? null : categoryId));
     };
 
     const filteredCategories = categories.filter(category =>
         category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         category.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-    if (view === 'view' && selectedCategory) {
-        return <CategoryView category={selectedCategory} onBack={handleBackToList} />;
-    }
 
     return (
         <div className="space-y-6">
@@ -81,16 +70,19 @@ const CategoryManagementPage: React.FC<CategoryManagementPageProps> = ({ categor
             <div className="bg-white rounded-lg shadow-md border border-gray-200">
                  <ul className="divide-y divide-gray-200">
                     {filteredCategories.length > 0 ? filteredCategories.map(category => (
-                        <li key={category.id} className="p-4 flex justify-between items-center group">
-                            <div className="flex-1 cursor-pointer" onClick={() => handleViewCategory(category)}>
-                                <p className="font-semibold text-gray-800 group-hover:text-[#5F716B]">{category.name}</p>
-                                <p className="text-sm text-gray-500 truncate">{category.description}</p>
+                        <li key={category.id} className="p-4 group">
+                            <div className="flex justify-between items-center">
+                                <div className="flex-1 cursor-pointer" onClick={() => handleToggleExpand(category.id)}>
+                                    <p className="font-semibold text-gray-800 group-hover:text-[#5F716B]">{category.name}</p>
+                                    <p className="text-sm text-gray-500 truncate">{category.description}</p>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <button onClick={() => handleToggleExpand(category.id)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="View"><EyeIcon className="h-5 w-5"/></button>
+                                    <button onClick={() => setModal({ type: 'EDIT_CATEGORY', payload: category })} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="Edit"><PencilIcon className="h-5 w-5"/></button>
+                                    <button onClick={() => handleDeleteRequest(category)} className="p-2 text-gray-500 hover:bg-red-100 hover:text-red-600 rounded-md" title="Delete"><TrashIcon className="h-5 w-5"/></button>
+                                </div>
                             </div>
-                            <div className="flex items-center space-x-2">
-                                <button onClick={() => handleViewCategory(category)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="View"><EyeIcon className="h-5 w-5"/></button>
-                                <button onClick={() => setModal({ type: 'EDIT_CATEGORY', payload: category })} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="Edit"><PencilIcon className="h-5 w-5"/></button>
-                                <button onClick={() => handleDeleteRequest(category)} className="p-2 text-gray-500 hover:bg-red-100 hover:text-red-600 rounded-md" title="Delete"><TrashIcon className="h-5 w-5"/></button>
-                            </div>
+                            {expandedCategoryId === category.id && <CategoryView category={category} />}
                         </li>
                     )) : (
                          <p className="text-center text-gray-500 py-8">No categories found.</p>

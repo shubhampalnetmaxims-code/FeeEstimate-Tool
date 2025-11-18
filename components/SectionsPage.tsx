@@ -15,8 +15,7 @@ interface SectionsPageProps {
 }
 
 const SectionsPage: React.FC<SectionsPageProps> = ({ categories, setCategories, sections, setSections }) => {
-    const [view, setView] = useState<'list' | 'view'>('list');
-    const [selectedSection, setSelectedSection] = useState<Section | null>(null);
+    const [expandedSectionId, setExpandedSectionId] = useState<string | null>(null);
     const [modal, setModal] = useState<{ type: string | null, payload?: any }>({ type: null });
 
     const handleSaveSection = (newSection: Section) => {
@@ -39,19 +38,9 @@ const SectionsPage: React.FC<SectionsPageProps> = ({ categories, setCategories, 
         setModal({ type: null });
     };
     
-    const handleViewSection = (section: Section) => {
-        setSelectedSection(section);
-        setView('view');
+    const handleToggleExpand = (sectionId: string) => {
+        setExpandedSectionId(prevId => (prevId === sectionId ? null : sectionId));
     };
-
-    const handleBackToList = () => {
-        setSelectedSection(null);
-        setView('list');
-    };
-
-    if (view === 'view' && selectedSection) {
-        return <SectionView section={selectedSection} onBack={handleBackToList} />;
-    }
 
     return (
         <div className="space-y-6">
@@ -77,16 +66,19 @@ const SectionsPage: React.FC<SectionsPageProps> = ({ categories, setCategories, 
             <div className="bg-white rounded-lg shadow-md border border-gray-200">
                  <ul className="divide-y divide-gray-200">
                     {sections.map(section => (
-                         <li key={section.id} className="p-4 flex justify-between items-center group">
-                            <div className="flex-1 cursor-pointer" onClick={() => handleViewSection(section)}>
-                                <p className="font-semibold text-gray-800 group-hover:text-[#5F716B]">{section.name}</p>
-                                <p className="text-sm text-gray-500 truncate">{section.description}</p>
+                         <li key={section.id} className="p-4 group">
+                             <div className="flex justify-between items-center">
+                                <div className="flex-1 cursor-pointer" onClick={() => handleToggleExpand(section.id)}>
+                                    <p className="font-semibold text-gray-800 group-hover:text-[#5F716B]">{section.name}</p>
+                                    <p className="text-sm text-gray-500 truncate">{section.description}</p>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <button onClick={() => handleToggleExpand(section.id)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="View"><EyeIcon className="h-5 w-5"/></button>
+                                    <button onClick={() => setModal({ type: 'EDIT_SECTION', payload: section })} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="Edit"><PencilIcon className="h-5 w-5"/></button>
+                                    <button onClick={() => handleDeleteRequest(section)} className="p-2 text-gray-500 hover:bg-red-100 hover:text-red-600 rounded-md" title="Delete"><TrashIcon className="h-5 w-5"/></button>
+                                </div>
                             </div>
-                            <div className="flex items-center space-x-2">
-                                <button onClick={() => handleViewSection(section)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="View"><EyeIcon className="h-5 w-5"/></button>
-                                <button onClick={() => setModal({ type: 'EDIT_SECTION', payload: section })} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="Edit"><PencilIcon className="h-5 w-5"/></button>
-                                <button onClick={() => handleDeleteRequest(section)} className="p-2 text-gray-500 hover:bg-red-100 hover:text-red-600 rounded-md" title="Delete"><TrashIcon className="h-5 w-5"/></button>
-                            </div>
+                            {expandedSectionId === section.id && <SectionView section={section} />}
                         </li>
                     ))}
                     {sections.length === 0 && <p className="text-black text-center py-8">No sections created yet. Click "Add Section" to get started.</p>}
