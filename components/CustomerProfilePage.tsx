@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CustomerData } from '../types';
 
@@ -13,8 +14,8 @@ const ProfileDetail = ({ label, value }: { label: string; value?: string | numbe
              <div className="md:col-span-2">
                 <p className="text-sm font-medium text-gray-600">{label}</p>
                 <div className="flex flex-wrap gap-2 mt-2">
-                  {value.map(spec => (
-                     <span key={spec} className="bg-gray-100 text-black text-xs font-medium px-2.5 py-1 rounded-full">{spec}</span>
+                  {value.map((spec, index) => (
+                     <span key={index} className="bg-gray-100 text-black text-xs font-medium px-2.5 py-1 rounded-full">{typeof spec === 'string' ? spec : JSON.stringify(spec)}</span>
                   ))}
                 </div>
               </div>

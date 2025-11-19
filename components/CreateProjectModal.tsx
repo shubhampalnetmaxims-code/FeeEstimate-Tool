@@ -1,6 +1,7 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
-import { Project, ProjectStage, ProjectType, Category, Section, SectionTask, SectionContentItem } from '../types';
-import { PlusIcon, TrashIcon } from './common/Icons';
+import { Project, ProjectStage, ProjectType, Category, Section, SectionTask, SectionContentItem, SpaceDetails, SpaceSizeType } from '../types';
+import { PlusIcon, TrashIcon, ChevronDownIcon } from './common/Icons';
 
 interface ProjectCreationWizardProps {
     onCancel: () => void;
@@ -20,6 +21,8 @@ const qualityLevels: { [key: string]: string } = {
     'Premium': 'High-end finishes with custom elements',
     'Luxury': 'Luxury finishes with bespoke solutions'
 };
+const currencies = ['AUD', 'USD', 'EUR', 'GBP', 'CAD', 'NZD'];
+const spaceSizes: SpaceSizeType[] = ['Small', 'Medium', 'Large', 'Custom'];
 
 // Calculations
 const calculateTaskTotal = (task: SectionTask) => {
@@ -145,13 +148,14 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
     
     // Step 1 State
     const [projectName, setProjectName] = useState('');
+    const [currency, setCurrency] = useState('AUD');
     const [budgetMin, setBudgetMin] = useState<number | ''>('');
     const [budgetMax, setBudgetMax] = useState<number | ''>('');
     const [timelineMin, setTimelineMin] = useState<number | ''>('');
     const [timelineMax, setTimelineMax] = useState<number | ''>('');
 
     // Step 2 State
-    const [selectedSpaces, setSelectedSpaces] = useState<string[]>([]);
+    const [spaces, setSpaces] = useState<SpaceDetails[]>([]);
     const [totalArea, setTotalArea] = useState<number | ''>('');
     const [qualityLevel, setQualityLevel] = useState<'Standard' | 'Premium' | 'Luxury' | null>(null);
 
@@ -173,7 +177,7 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
     }, [selectedTemplate]);
     
     // --- Stage Manipulation Handlers ---
-    
+    // ... (Keep stage handlers same as before)
     const handleStageNameChange = (index: number, newName: string) => {
         setStages(prevStages => 
             prevStages.map((stage, i) => i === index ? { ...stage, name: newName } : stage)
@@ -340,14 +344,38 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
         }));
     };
 
-    // --- End Stage Handlers ---
+    // --- Spaces Handlers ---
 
-    const handleSpaceToggle = (space: string) => {
-        setSelectedSpaces(prev => prev.includes(space) ? prev.filter(s => s !== space) : [...prev, space]);
+    const handleAddSpace = (spaceName: string) => {
+        setSpaces(prev => [
+            ...prev,
+            {
+                id: newId('space'),
+                name: spaceName,
+                sizeType: 'Medium' // Default
+            }
+        ]);
     };
 
+    const handleRemoveSpace = (spaceId: string) => {
+        setSpaces(prev => prev.filter(s => s.id !== spaceId));
+    };
+
+    const handleSpaceUpdate = (spaceId: string, field: keyof SpaceDetails, value: any) => {
+        setSpaces(prev => prev.map(s => s.id === spaceId ? { ...s, [field]: value } : s));
+    };
+
+    const handleDimensionUpdate = (spaceId: string, dim: 'length' | 'width' | 'height', value: number) => {
+        setSpaces(prev => prev.map(s => {
+            if (s.id !== spaceId) return s;
+            const newDims = s.customDimensions || { length: 0, width: 0, height: 0 };
+            return { ...s, customDimensions: { ...newDims, [dim]: value } };
+        }));
+    };
+
+
     const isStep1Valid = projectName && budgetMin !== '' && budgetMax !== '' && timelineMin !== '' && timelineMax !== '';
-    const isStep2Valid = selectedSpaces.length > 0 && totalArea !== '' && qualityLevel;
+    const isStep2Valid = spaces.length > 0 && totalArea !== '' && qualityLevel;
     const isStep3Valid = !!selectedTemplate;
     
     const nextStep = () => setStep(s => s + 1);
@@ -380,9 +408,10 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
             stages: stages.map(stage => ({ ...stage, id: newId('stage') })),
             budgetMin: Number(budgetMin),
             budgetMax: Number(budgetMax),
+            currency: currency,
             timelineMin: Number(timelineMin),
             timelineMax: Number(timelineMax),
-            spaces: selectedSpaces,
+            spaces: spaces,
             totalArea: Number(totalArea),
             qualityLevel: qualityLevel!,
         };
@@ -398,11 +427,24 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
                 <input type="text" value={projectName} onChange={e => setProjectName(e.target.value)} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800 transition-colors" placeholder="e.g., Seaside Villa Renovation" />
             </div>
             <div>
-                <label className="block text-sm font-bold text-stone-700 mb-2">Total Budget (USD) *</label>
+                <label className="block text-sm font-bold text-stone-700 mb-2">Total Budget *</label>
                 <div className="flex items-center space-x-4">
-                    <input type="number" placeholder="Min" value={budgetMin} onChange={e => setBudgetMin(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800"/>
+                    <div className="w-24 flex-shrink-0">
+                        <select 
+                            value={currency} 
+                            onChange={e => setCurrency(e.target.value)}
+                            className="w-full px-2 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800 font-medium"
+                        >
+                            {currencies.map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                    </div>
+                    <div className="flex-1">
+                        <input type="number" placeholder="Min" value={budgetMin} onChange={e => setBudgetMin(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800"/>
+                    </div>
                     <span className="text-stone-400 font-serif italic">to</span>
-                    <input type="number" placeholder="Max" value={budgetMax} onChange={e => setBudgetMax(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800"/>
+                    <div className="flex-1">
+                        <input type="number" placeholder="Max" value={budgetMax} onChange={e => setBudgetMax(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800"/>
+                    </div>
                 </div>
             </div>
             <div>
@@ -421,18 +463,86 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
             <h3 className="text-2xl font-serif font-bold text-stone-900 mb-6 text-center">Spaces & Details</h3>
             <div>
                  <label className="block text-sm font-bold text-stone-700 mb-2">Spaces to be Designed *</label>
-                 <div className="p-4 border border-stone-200 rounded-xl bg-stone-50/50 max-h-64 overflow-y-auto">
-                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                         {designSpaces.map(space => (
-                             <label key={space} className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-all ${selectedSpaces.includes(space) ? 'bg-stone-800 text-white shadow-md' : 'bg-white border border-stone-100 hover:border-stone-300 text-stone-700'}`}>
-                                 <input type="checkbox" checked={selectedSpaces.includes(space)} onChange={() => handleSpaceToggle(space)} className="hidden"/>
-                                 <span className="text-sm font-medium">{space}</span>
-                             </label>
-                         ))}
-                     </div>
+                 <div className="mb-4 relative">
+                    <select 
+                        className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-white text-stone-900 focus:outline-none focus:border-stone-800 appearance-none cursor-pointer"
+                        onChange={(e) => {
+                            if (e.target.value) {
+                                handleAddSpace(e.target.value);
+                                e.target.value = "";
+                            }
+                        }}
+                        defaultValue=""
+                    >
+                        <option value="" disabled>Add a space...</option>
+                        {designSpaces.filter(ds => !spaces.some(s => s.name === ds)).map(space => (
+                            <option key={space} value={space}>{space}</option>
+                        ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-stone-700">
+                        <ChevronDownIcon className="h-5 w-5" />
+                    </div>
+                 </div>
+
+                 <div className="space-y-3">
+                    {spaces.map((space, index) => (
+                        <div key={space.id} className="p-4 border border-stone-200 rounded-lg bg-white animate-fadeIn">
+                            <div className="flex justify-between items-start mb-3">
+                                <h4 className="font-bold text-stone-900">{space.name}</h4>
+                                <button onClick={() => handleRemoveSpace(space.id)} className="text-stone-400 hover:text-red-500">
+                                    <TrashIcon className="h-5 w-5" />
+                                </button>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs font-medium text-stone-500 mb-1">Size Type</label>
+                                    <select 
+                                        value={space.sizeType} 
+                                        onChange={(e) => handleSpaceUpdate(space.id, 'sizeType', e.target.value)}
+                                        className="w-full px-3 py-2 border border-stone-300 rounded-md bg-white text-stone-800 text-sm"
+                                    >
+                                        {spaceSizes.map(size => <option key={size} value={size}>{size}</option>)}
+                                    </select>
+                                </div>
+                                {space.sizeType === 'Custom' && (
+                                    <div className="col-span-1 md:col-span-2 grid grid-cols-3 gap-2 bg-white p-3 rounded-md border border-stone-200">
+                                        <div>
+                                            <label className="block text-xs text-stone-400 mb-1">Length (ft)</label>
+                                            <input 
+                                                type="number" 
+                                                value={space.customDimensions?.length || ''} 
+                                                onChange={(e) => handleDimensionUpdate(space.id, 'length', Number(e.target.value))}
+                                                className="w-full px-2 py-1 border border-stone-300 rounded text-sm bg-white"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs text-stone-400 mb-1">Width (ft)</label>
+                                            <input 
+                                                type="number" 
+                                                value={space.customDimensions?.width || ''} 
+                                                onChange={(e) => handleDimensionUpdate(space.id, 'width', Number(e.target.value))}
+                                                className="w-full px-2 py-1 border border-stone-300 rounded text-sm bg-white"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs text-stone-400 mb-1">Height (ft)</label>
+                                            <input 
+                                                type="number" 
+                                                value={space.customDimensions?.height || ''} 
+                                                onChange={(e) => handleDimensionUpdate(space.id, 'height', Number(e.target.value))}
+                                                className="w-full px-2 py-1 border border-stone-300 rounded text-sm bg-white"
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                    {spaces.length === 0 && <p className="text-stone-500 italic text-sm text-center py-4">No spaces added yet. Select from dropdown above.</p>}
                  </div>
             </div>
-            <div>
+            <div className="border-t border-stone-200 pt-4 mt-4">
                 <label className="block text-sm font-bold text-stone-700 mb-2">Total Area (sq ft) *</label>
                 <input type="number" value={totalArea} onChange={e => setTotalArea(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800"/>
             </div>
@@ -537,17 +647,6 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
                                                             <span className="text-xs font-bold text-stone-500 uppercase tracking-widest">{contentItem.name}</span>
                                                             <button onClick={() => handleDeleteCategoryFromSection(stageIdx, sectionIdx, contentIdx)} className="text-stone-300 hover:text-red-500 transition-colors"><TrashIcon className="h-3 w-3"/></button>
                                                       </div>
-                                                      {/* Tasks Header */}
-                                                       { (contentItem.tasks.length > 0 || contentItem.subcategories.some(s => s.tasks.length > 0)) &&
-                                                            <div className="grid grid-cols-12 gap-2 px-3 py-2 mb-2 text-[10px] font-bold text-stone-400 uppercase bg-stone-50 rounded-md">
-                                                                <div className="col-span-4 md:col-span-3">Task</div>
-                                                                <div className="col-span-2 text-center">Sugg. Hrs</div>
-                                                                <div className="col-span-2 text-center">Your Est.</div>
-                                                                <div className="col-span-2 text-center">Cost/Hr</div>
-                                                                <div className="col-span-2 text-center">Total</div>
-                                                                <div className="col-span-1"></div>
-                                                            </div>
-                                                       }
                                                       
                                                       <div className="space-y-2">
                                                           {contentItem.tasks.map((task, taskIdx) => (
@@ -625,7 +724,7 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
                         <button onClick={() => setStep(1)} className="text-xs font-bold text-stone-400 hover:text-stone-900 uppercase tracking-wide">Edit</button>
                     </div>
                     <p className="text-sm text-stone-700"><strong className="text-stone-900">Project Name:</strong> {projectName}</p>
-                    <p className="text-sm text-stone-700"><strong className="text-stone-900">Budget:</strong> ${Number(budgetMin).toLocaleString()} - ${Number(budgetMax).toLocaleString()}</p>
+                    <p className="text-sm text-stone-700"><strong className="text-stone-900">Budget:</strong> {currency} {Number(budgetMin).toLocaleString()} - {Number(budgetMax).toLocaleString()}</p>
                     <p className="text-sm text-stone-700"><strong className="text-stone-900">Timeline:</strong> {timelineMin} - {timelineMax} weeks</p>
                 </div>
                 <div className="space-y-3 p-6 border border-stone-200 rounded-xl bg-white shadow-sm">
@@ -633,7 +732,7 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
                         <div><h4 className="font-serif font-bold text-stone-800 text-lg">Details</h4></div>
                         <button onClick={() => setStep(2)} className="text-xs font-bold text-stone-400 hover:text-stone-900 uppercase tracking-wide">Edit</button>
                     </div>
-                    <p className="text-sm text-stone-700"><strong className="text-stone-900">Spaces:</strong> {selectedSpaces.join(', ')}</p>
+                    <p className="text-sm text-stone-700"><strong className="text-stone-900">Spaces:</strong> {spaces.map(s => s.name).join(', ')}</p>
                     <p className="text-sm text-stone-700"><strong className="text-stone-900">Total Area:</strong> {totalArea} sq ft</p>
                     <p className="text-sm text-stone-700"><strong className="text-stone-900">Quality:</strong> {qualityLevel}</p>
                     <p className="text-sm text-stone-700"><strong className="text-stone-900">Type:</strong> {currentProjectTypeName}</p>

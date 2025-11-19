@@ -1,3 +1,4 @@
+
 import { Project, Section } from '../types';
 import { initialSections } from './initialData';
 import { newId, deepCopy } from './initialData';
@@ -33,6 +34,7 @@ export const initialProjects: Project[] = [
     clientAddress: '123 Main St, Anytown, USA',
     projectType: 'Residential Renovation',
     projectDescription: 'Full renovation of a 2-bedroom downtown apartment with a focus on modern aesthetics and smart home integration.',
+    spaces: [],
     stages: [
       {
         id: newId('stage'),
@@ -52,6 +54,7 @@ export const initialProjects: Project[] = [
     clientAddress: '101 Maple Drive, Suburbia',
     projectType: 'Residential Renovation',
     projectDescription: 'A two-story expansion for a growing family, including a new master suite and an open-concept kitchen and living area.',
+    spaces: [],
     stages: [
       {
         id: newId('stage'),
@@ -78,6 +81,7 @@ export const initialProjects: Project[] = [
     clientAddress: '456 Oak Ave, Metropolis',
     projectType: 'Commercial Fit-out',
     projectDescription: 'Complete interior design and fit-out for a new cafe and bakery. The theme is bright, airy, and welcoming, with a mix of industrial and natural elements.',
+    spaces: [],
     stages: [
       {
         id: newId('stage'),
@@ -92,6 +96,7 @@ export const initialProjects: Project[] = [
     clientAddress: '789 Innovation Way, Silicon Valley',
     projectType: 'Commercial Fit-out',
     projectDescription: 'Design of a dynamic and collaborative office space for a fast-growing tech startup, featuring breakout zones, a modern kitchen, and flexible workstations.',
+    spaces: [],
     stages: [
       {
         id: newId('stage'),
@@ -113,6 +118,7 @@ export const initialProjects: Project[] = [
     clientAddress: '789 Beach Rd, Summerland',
     projectType: 'New Build Styling',
     projectDescription: 'Interior styling for a newly built holiday home. The focus is on creating a relaxed, coastal vibe with durable, family-friendly furnishings.',
+    spaces: [],
     stages: [
       {
         id: newId('stage'),
@@ -132,6 +138,7 @@ export const initialProjects: Project[] = [
     clientAddress: '321 Cityview Plaza, Apt 12',
     projectType: 'New Build Styling',
     projectDescription: 'Styling a new loft apartment with a minimalist aesthetic, focusing on clean lines, a neutral color palette, and high-quality, multi-functional furniture.',
+    spaces: [],
     stages: [
        {
         id: newId('stage'),

@@ -1,3 +1,4 @@
+
 // For Category Templates
 export interface CategoryTask {
   id: string;
@@ -68,6 +69,19 @@ export interface ProjectStage {
   sections: Section[]; // These are deep copies with editable tasks
 }
 
+export type SpaceSizeType = 'Small' | 'Medium' | 'Large' | 'Custom';
+
+export interface SpaceDetails {
+    id: string;
+    name: string;
+    sizeType: SpaceSizeType;
+    customDimensions?: {
+        length: number;
+        width: number;
+        height: number;
+    };
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -79,9 +93,10 @@ export interface Project {
   // New fields from wizard
   budgetMin?: number;
   budgetMax?: number;
+  currency?: string;
   timelineMin?: number;
   timelineMax?: number;
-  spaces?: string[];
+  spaces: SpaceDetails[];
   totalArea?: number;
   qualityLevel?: 'Standard' | 'Premium' | 'Luxury';
 }

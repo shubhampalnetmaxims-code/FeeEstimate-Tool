@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { Project, ProjectStage, Section, SectionTask } from '../types';
+import { Project, ProjectStage, Section, SectionTask, SpaceDetails } from '../types';
 import { ChevronLeftIcon } from './common/Icons';
 
 const calculateTaskTotal = (task: SectionTask) => {
@@ -39,15 +40,43 @@ const TaskRowView = ({ task }: { task: SectionTask }) => (
     </tr>
 );
 
-const DetailItem = ({ label, value }: { label: string; value?: string | number | string[] }) => {
+const DetailItem = ({ label, value }: { label: string; value?: string | number | string[] | SpaceDetails[] }) => {
     if (!value && value !== 0) return null;
 
+    // Handle SpaceDetails array
     if (Array.isArray(value)) {
+        if (value.length === 0) return null;
+        const isSpaceDetails = (val: any): val is SpaceDetails => typeof val === 'object' && 'sizeType' in val;
+
+        if (isSpaceDetails(value[0])) {
+             return (
+                <div className="md:col-span-2">
+                    <p className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">{label}</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {(value as SpaceDetails[]).map(space => (
+                            <div key={space.id} className="bg-white border border-stone-100 rounded-lg p-3 text-sm">
+                                <div className="font-bold text-stone-800 flex justify-between">
+                                    <span>{space.name}</span>
+                                    <span className="text-stone-500 font-normal">{space.sizeType}</span>
+                                </div>
+                                {space.sizeType === 'Custom' && space.customDimensions && (
+                                    <div className="text-xs text-stone-500 mt-1">
+                                        L: {space.customDimensions.length}ft &times; W: {space.customDimensions.width}ft &times; H: {space.customDimensions.height}ft
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+        
+        // Handle simple string array
          return (
              <div className="md:col-span-2">
                 <p className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">{label}</p>
                 <div className="flex flex-wrap gap-2">
-                  {value.map(item => (
+                  {value.map((item: any) => (
                      <span key={item} className="bg-stone-100 text-stone-800 text-xs font-medium px-3 py-1 rounded-full border border-stone-200">{item}</span>
                   ))}
                 </div>
@@ -95,7 +124,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onBack }) => {
                     <DetailItem label="Client Address" value={project.clientAddress} />
                     <DetailItem label="Project Type" value={project.projectType} />
 
-                    <DetailItem label="Budget (USD)" value={project.budgetMin && project.budgetMax ? `$${project.budgetMin.toLocaleString()} - $${project.budgetMax.toLocaleString()}` : undefined} />
+                    <DetailItem label={`Budget (${project.currency || 'AUD'})`} value={project.budgetMin && project.budgetMax ? `${project.budgetMin.toLocaleString()} - ${project.budgetMax.toLocaleString()}` : undefined} />
                     <DetailItem label="Timeline" value={project.timelineMin && project.timelineMax ? `${project.timelineMin} - ${project.timelineMax} weeks` : undefined} />
                     <DetailItem label="Total Area" value={project.totalArea ? `${project.totalArea} sq ft` : undefined} />
                     <DetailItem label="Quality Level" value={project.qualityLevel} />

@@ -1,6 +1,7 @@
+
 import React, { useState } from 'react';
-import { Project, ProjectStage, Section, Category, SectionTask, SectionContentItem, ProjectType } from '../types';
-import { PlusIcon, TrashIcon, ChevronLeftIcon } from './common/Icons';
+import { Project, ProjectStage, Section, Category, SectionTask, SectionContentItem, ProjectType, SpaceDetails, SpaceSizeType } from '../types';
+import { PlusIcon, TrashIcon, ChevronLeftIcon, ChevronDownIcon } from './common/Icons';
 
 interface ProjectFormProps {
     initialData: Project | null;
@@ -47,17 +48,19 @@ const calculateOverallTotal = (project: Project) => {
 };
 
 const designSpaces = ["Living Room", "Kitchen", "Master Bedroom", "Guest Bedroom", "Bathroom", "Home Office", "Dining Room", "Entryway", "Basement", "Outdoor Space", "Laundry", "Walk-in Closet", "Powder Room", "Family Room", "Study", "Media Room"];
+const spaceSizes: SpaceSizeType[] = ['Small', 'Medium', 'Large', 'Custom'];
 
 const qualityLevels: Record<string, string> = { 
     'Standard': 'Quality finishes with practical solutions', 
     'Premium': 'High-end finishes with custom elements', 
     'Luxury': 'Luxury finishes with bespoke solutions' 
 };
+const currencies = ['AUD', 'USD', 'EUR', 'GBP', 'CAD', 'NZD'];
 
 
 const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel, categories, sections, projectTypes, isCustomerView = false }) => {
     const [project, setProject] = useState<Project>(
-        initialData ? deepCopy(initialData) : {
+        initialData ? { ...deepCopy(initialData), currency: initialData.currency || 'AUD' } : {
             id: newId('proj'),
             name: '',
             clientAddress: '',
@@ -65,19 +68,40 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
             projectDescription: '',
             stages: [],
             spaces: [],
+            currency: 'AUD',
         }
     );
 
-    const handleInputChange = (field: keyof Project, value: string | number | string[] | undefined) => {
+    const handleInputChange = (field: keyof Project, value: any) => {
         setProject(p => ({ ...p, [field]: value }));
     };
 
-    const handleSpaceChange = (space: string) => {
-        const currentSpaces = project.spaces || [];
-        const newSpaces = currentSpaces.includes(space)
-            ? currentSpaces.filter(s => s !== space)
-            : [...currentSpaces, space];
-        handleInputChange('spaces', newSpaces);
+    const handleAddSpace = (spaceName: string) => {
+        const newSpace: SpaceDetails = {
+            id: newId('space'),
+            name: spaceName,
+            sizeType: 'Medium'
+        };
+        setProject(p => ({ ...p, spaces: [...p.spaces, newSpace] }));
+    };
+    
+    const handleRemoveSpace = (spaceId: string) => {
+        setProject(p => ({ ...p, spaces: p.spaces.filter(s => s.id !== spaceId) }));
+    };
+
+    const handleSpaceUpdate = (spaceId: string, field: keyof SpaceDetails, value: any) => {
+        setProject(p => ({ ...p, spaces: p.spaces.map(s => s.id === spaceId ? { ...s, [field]: value } : s) }));
+    };
+
+    const handleDimensionUpdate = (spaceId: string, dim: 'length' | 'width' | 'height', value: number) => {
+        setProject(p => ({
+            ...p,
+            spaces: p.spaces.map(s => {
+                if (s.id !== spaceId) return s;
+                const newDims = s.customDimensions || { length: 0, width: 0, height: 0 };
+                return { ...s, customDimensions: { ...newDims, [dim]: value } };
+            })
+        }));
     };
     
     const handleAddStage = () => {
@@ -381,8 +405,17 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                     <>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                              <div>
-                                <label className="block text-sm font-medium text-stone-700 mb-2">Budget (USD)</label>
+                                <label className="block text-sm font-medium text-stone-700 mb-2">Budget</label>
                                 <div className="flex items-center space-x-4">
+                                    <div className="w-28 flex-shrink-0">
+                                        <select
+                                            value={project.currency}
+                                            onChange={e => handleInputChange('currency', e.target.value)}
+                                            className="w-full px-3 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500"
+                                        >
+                                            {currencies.map(c => <option key={c} value={c}>{c}</option>)}
+                                        </select>
+                                    </div>
                                     <input type="number" placeholder="Min" value={project.budgetMin ?? ''} onChange={e => handleInputChange('budgetMin', handleNumericInputChange(e.target.value))} className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500"/>
                                     <span className="text-stone-400 font-serif italic">to</span>
                                     <input type="number" placeholder="Max" value={project.budgetMax ?? ''} onChange={e => handleInputChange('budgetMax', handleNumericInputChange(e.target.value))} className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500"/>
@@ -420,21 +453,84 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                         
                          <div>
                             <label className="block text-sm font-medium text-stone-700 mb-2">Spaces to be Designed</label>
-                            <div className="p-4 border border-stone-200 rounded-lg bg-stone-50/50 max-h-48 overflow-y-auto">
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                                    {designSpaces.map(space => (
-                                        <label key={space} className="flex items-center space-x-3 p-2 hover:bg-white rounded cursor-pointer transition-colors">
-                                            <input
-                                                type="checkbox"
-                                                checked={(project.spaces || []).includes(space)}
-                                                onChange={() => handleSpaceChange(space)}
-                                                className="h-4 w-4 text-stone-900 focus:ring-stone-500 border-stone-300 rounded"
-                                            />
-                                            <span className="text-sm text-stone-700">{space}</span>
-                                        </label>
+                             <div className="mb-4 relative">
+                                <select 
+                                    className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500 appearance-none cursor-pointer"
+                                    onChange={(e) => {
+                                        if (e.target.value) {
+                                            handleAddSpace(e.target.value);
+                                            e.target.value = "";
+                                        }
+                                    }}
+                                    defaultValue=""
+                                >
+                                    <option value="" disabled>Add a space...</option>
+                                    {designSpaces.filter(ds => !project.spaces.some(s => s.name === ds)).map(space => (
+                                        <option key={space} value={space}>{space}</option>
                                     ))}
+                                </select>
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-stone-700">
+                                    <ChevronDownIcon className="h-5 w-5" />
                                 </div>
-                            </div>
+                             </div>
+
+                             <div className="space-y-3">
+                                {project.spaces.map((space, index) => (
+                                    <div key={space.id} className="p-4 border border-stone-200 rounded-lg bg-white">
+                                        <div className="flex justify-between items-start mb-3">
+                                            <h4 className="font-bold text-stone-900">{space.name}</h4>
+                                            <button onClick={() => handleRemoveSpace(space.id)} className="text-stone-400 hover:text-red-500">
+                                                <TrashIcon className="h-5 w-5" />
+                                            </button>
+                                        </div>
+                                        
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="block text-xs font-medium text-stone-500 mb-1">Size Type</label>
+                                                <select 
+                                                    value={space.sizeType} 
+                                                    onChange={(e) => handleSpaceUpdate(space.id, 'sizeType', e.target.value)}
+                                                    className="w-full px-3 py-2 border border-stone-300 rounded-md bg-white text-stone-800 text-sm focus:border-stone-500 focus:ring-1 focus:ring-stone-500"
+                                                >
+                                                    {spaceSizes.map(size => <option key={size} value={size}>{size}</option>)}
+                                                </select>
+                                            </div>
+                                            {space.sizeType === 'Custom' && (
+                                                <div className="col-span-1 md:col-span-2 grid grid-cols-3 gap-2 bg-white p-3 rounded-md border border-stone-200">
+                                                    <div>
+                                                        <label className="block text-xs text-stone-400 mb-1">Length (ft)</label>
+                                                        <input 
+                                                            type="number" 
+                                                            value={space.customDimensions?.length || ''} 
+                                                            onChange={(e) => handleDimensionUpdate(space.id, 'length', Number(e.target.value))}
+                                                            className="w-full px-2 py-1 border border-stone-300 rounded text-sm focus:border-stone-500 focus:ring-1 focus:ring-stone-500 bg-white"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs text-stone-400 mb-1">Width (ft)</label>
+                                                        <input 
+                                                            type="number" 
+                                                            value={space.customDimensions?.width || ''} 
+                                                            onChange={(e) => handleDimensionUpdate(space.id, 'width', Number(e.target.value))}
+                                                            className="w-full px-2 py-1 border border-stone-300 rounded text-sm focus:border-stone-500 focus:ring-1 focus:ring-stone-500 bg-white"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs text-stone-400 mb-1">Height (ft)</label>
+                                                        <input 
+                                                            type="number" 
+                                                            value={space.customDimensions?.height || ''} 
+                                                            onChange={(e) => handleDimensionUpdate(space.id, 'height', Number(e.target.value))}
+                                                            className="w-full px-2 py-1 border border-stone-300 rounded text-sm focus:border-stone-500 focus:ring-1 focus:ring-stone-500 bg-white"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                                {project.spaces.length === 0 && <p className="text-stone-500 italic text-sm text-center py-4">No spaces added yet.</p>}
+                             </div>
                         </div>
 
 
