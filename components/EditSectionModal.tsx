@@ -175,7 +175,7 @@ const EditSectionModal: React.FC<EditSectionModalProps> = ({ onClose, onSave, ca
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 z-40 flex items-center justify-center p-4">
+        <div className="fixed inset-0 left-64 bg-black/50 z-40 flex items-center justify-center p-4">
             {isCategoryModalOpen && <CategoryModal onClose={() => setCategoryModalOpen(false)} onSave={handleSaveNewCategory} />}
             <div className="bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-black">
                 <div className="flex justify-between items-center p-4 border-b border-black">

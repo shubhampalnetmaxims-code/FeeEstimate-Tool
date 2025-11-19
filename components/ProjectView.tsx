@@ -30,12 +30,12 @@ const calculateOverallTotal = (project: Project) => {
 };
 
 const TaskRowView = ({ task }: { task: SectionTask }) => (
-    <tr className="border-b border-gray-200 last:border-b-0">
-        <td className="py-2 px-4 text-black">{task.name}</td>
-        <td className="py-2 px-4 text-center text-gray-600">{task.estimateHours}</td>
-        <td className="py-2 px-4 text-center text-gray-600">${task.estimateCost?.toFixed(2)}</td>
-        <td className="py-2 px-4 text-center text-gray-600">{task.actualHours ?? '-'}</td>
-        <td className="py-2 px-4 text-center font-semibold text-black">${calculateTaskTotal(task).toFixed(2)}</td>
+    <tr className="border-b border-stone-100 last:border-b-0 hover:bg-stone-50 transition-colors">
+        <td className="py-3 px-4 text-stone-800">{task.name}</td>
+        <td className="py-3 px-4 text-center text-stone-500">{task.estimateHours}</td>
+        <td className="py-3 px-4 text-center text-stone-500">${task.estimateCost?.toFixed(2)}</td>
+        <td className="py-3 px-4 text-center text-stone-500">{task.actualHours ?? '-'}</td>
+        <td className="py-3 px-4 text-center font-bold text-stone-900">${calculateTaskTotal(task).toFixed(2)}</td>
     </tr>
 );
 
@@ -45,10 +45,10 @@ const DetailItem = ({ label, value }: { label: string; value?: string | number |
     if (Array.isArray(value)) {
          return (
              <div className="md:col-span-2">
-                <p className="text-sm font-medium text-gray-600">{label}</p>
-                <div className="flex flex-wrap gap-2 mt-2">
+                <p className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">{label}</p>
+                <div className="flex flex-wrap gap-2">
                   {value.map(item => (
-                     <span key={item} className="bg-gray-100 text-black text-xs font-medium px-2.5 py-1 rounded-full">{item}</span>
+                     <span key={item} className="bg-stone-100 text-stone-800 text-xs font-medium px-3 py-1 rounded-full border border-stone-200">{item}</span>
                   ))}
                 </div>
               </div>
@@ -57,8 +57,8 @@ const DetailItem = ({ label, value }: { label: string; value?: string | number |
     
     return (
         <div>
-            <p className="text-sm font-medium text-gray-600">{label}</p>
-            <p className="mt-1 text-black">{value}</p>
+            <p className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-1">{label}</p>
+            <p className="text-base text-stone-900 font-medium">{value}</p>
         </div>
     );
 };
@@ -73,25 +73,25 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onBack }) => {
     const overallTotal = calculateOverallTotal(project);
 
     return (
-        <div className="space-y-6">
-            <header className="flex justify-between items-center mb-8">
+        <div className="space-y-8 pb-12">
+            <header className="flex justify-between items-start mb-8 border-b border-stone-200 pb-6">
                 <div>
-                    <button onClick={onBack} className="flex items-center space-x-2 text-sm font-semibold text-black hover:text-gray-700 mb-2">
-                        <ChevronLeftIcon />
+                    <button onClick={onBack} className="flex items-center space-x-2 text-sm font-semibold text-stone-500 hover:text-stone-900 mb-4 transition-colors group">
+                        <ChevronLeftIcon className="group-hover:-translate-x-1 transition-transform" />
                         <span>Back to Projects</span>
                     </button>
-                    <h1 className="text-3xl font-bold text-black">{project.name}</h1>
-                    <p className="text-gray-600 mt-1">Project Details</p>
+                    <h1 className="text-4xl font-serif font-bold text-stone-900 tracking-tight">{project.name}</h1>
+                    <p className="text-stone-500 mt-2 text-lg font-light">Project Overview</p>
                 </div>
-                <div className="text-right">
-                    <p className="text-lg font-medium text-gray-600">Overall Project Total</p>
-                    <p className="text-4xl font-bold text-black">${overallTotal.toFixed(2)}</p>
+                <div className="text-right bg-stone-900 text-white p-6 rounded-xl shadow-lg">
+                    <p className="text-sm font-medium text-stone-400 uppercase tracking-wide">Overall Value</p>
+                    <p className="text-4xl font-serif font-bold mt-1">${overallTotal.toFixed(2)}</p>
                 </div>
             </header>
 
-            <div className="bg-white p-6 rounded-lg shadow-md border border-black space-y-4">
-                <h2 className="text-xl font-bold text-gray-700">Project Information</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-stone-200 space-y-6">
+                <h2 className="text-xl font-serif font-bold text-stone-800 border-b border-stone-100 pb-2">Project Information</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
                     <DetailItem label="Client Address" value={project.clientAddress} />
                     <DetailItem label="Project Type" value={project.projectType} />
 
@@ -103,56 +103,58 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onBack }) => {
                     <DetailItem label="Spaces to be Designed" value={project.spaces} />
 
                     <div className="md:col-span-2">
-                        <p className="text-sm font-medium text-gray-600">Project Description</p>
-                        <p className="text-black whitespace-pre-wrap">{project.projectDescription || 'Not specified'}</p>
+                        <p className="text-xs font-bold text-stone-400 uppercase tracking-wider mb-2">Project Description</p>
+                        <p className="text-stone-800 whitespace-pre-wrap leading-relaxed">{project.projectDescription || 'Not specified'}</p>
                     </div>
                 </div>
             </div>
 
-            <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-black">Stages</h2>
+            <div className="space-y-6">
+                <h2 className="text-2xl font-serif font-bold text-stone-900">Stages & Sections</h2>
                 {project.stages.map(stage => (
-                    <details key={stage.id} open className="bg-white rounded-lg shadow-md border border-black overflow-hidden">
-                        <summary className="p-4 flex justify-between items-center cursor-pointer bg-gray-50 hover:bg-gray-100">
-                            <h3 className="text-xl font-bold text-black">{stage.name}</h3>
+                    <details key={stage.id} open className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden group">
+                        <summary className="p-6 flex justify-between items-center cursor-pointer bg-stone-50 hover:bg-stone-100 transition-colors">
+                            <div className="flex items-center space-x-4">
+                                <h3 className="text-xl font-serif font-bold text-stone-900">{stage.name}</h3>
+                            </div>
                             <div className="text-right">
-                                <p className="text-sm font-medium text-gray-500">Stage Total</p>
-                                <p className="text-xl font-bold text-black">${calculateStageTotal(stage).toFixed(2)}</p>
+                                <p className="text-xs font-bold text-stone-400 uppercase tracking-wide">Stage Total</p>
+                                <p className="text-xl font-bold text-stone-900 font-serif">${calculateStageTotal(stage).toFixed(2)}</p>
                             </div>
                         </summary>
-                        <div className="p-4 space-y-4">
+                        <div className="p-6 space-y-6 bg-white">
                             {stage.sections.map(section => (
-                                <div key={section.id} className="border border-black rounded-md">
-                                    <div className="p-3 bg-gray-50/50 flex justify-between items-center border-b">
+                                <div key={section.id} className="border border-stone-200 rounded-lg overflow-hidden">
+                                    <div className="p-4 bg-stone-50/50 flex justify-between items-center border-b border-stone-200">
                                         <div>
-                                            <h4 className="text-lg font-semibold text-gray-700">{section.name}</h4>
-                                            {section.description && <p className="text-sm text-gray-500 italic">{section.description}</p>}
+                                            <h4 className="text-lg font-bold text-stone-700">{section.name}</h4>
+                                            {section.description && <p className="text-sm text-stone-500 italic font-light">{section.description}</p>}
                                         </div>
                                         <div className="text-right">
-                                            <p className="text-xs font-medium text-gray-500">Section Total</p>
-                                            <p className="text-lg font-bold text-gray-700">${calculateSectionTotal(section).toFixed(2)}</p>
+                                            <p className="text-xs font-bold text-stone-400 uppercase">Section Total</p>
+                                            <p className="text-lg font-bold text-stone-700 font-serif">${calculateSectionTotal(section).toFixed(2)}</p>
                                         </div>
                                     </div>
-                                    <div className="p-3 space-y-3">
+                                    <div className="p-4 space-y-6">
                                         {section.content.map(contentItem => (
                                             <div key={contentItem.categoryId}>
-                                                <h5 className="font-semibold text-gray-600 mb-2">{contentItem.name}</h5>
+                                                <h5 className="font-bold text-stone-500 text-xs uppercase tracking-widest mb-3">{contentItem.name}</h5>
                                                 <table className="w-full text-sm text-left">
-                                                    <thead className="bg-gray-100 text-xs text-gray-500 uppercase">
+                                                    <thead className="bg-stone-50 text-xs text-stone-400 uppercase tracking-wider">
                                                         <tr>
-                                                            <th className="py-2 px-4 font-semibold">Task Name</th>
-                                                            <th className="py-2 px-4 font-semibold text-center">Estimated Hrs</th>
+                                                            <th className="py-2 px-4 font-semibold rounded-l-md">Task</th>
+                                                            <th className="py-2 px-4 font-semibold text-center">Est Hrs</th>
                                                             <th className="py-2 px-4 font-semibold text-center">Cost/Hr</th>
-                                                            <th className="py-2 px-4 font-semibold text-center">Actual Hrs</th>
-                                                            <th className="py-2 px-4 font-semibold text-center">Total</th>
+                                                            <th className="py-2 px-4 font-semibold text-center">Act Hrs</th>
+                                                            <th className="py-2 px-4 font-semibold text-center rounded-r-md">Total</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         {contentItem.tasks.map(task => <TaskRowView key={task.id} task={task} />)}
                                                         {contentItem.subcategories.map(sub => (
                                                             <React.Fragment key={sub.id}>
-                                                                <tr className="bg-gray-50">
-                                                                    <td colSpan={5} className="py-2 px-4 font-semibold text-gray-600">{sub.name}</td>
+                                                                <tr className="bg-stone-50/30">
+                                                                    <td colSpan={5} className="py-2 px-4 font-semibold text-stone-600 italic pl-8">{sub.name}</td>
                                                                 </tr>
                                                                 {sub.tasks.map(task => <TaskRowView key={task.id} task={task} />)}
                                                             </React.Fragment>
@@ -164,21 +166,12 @@ const ProjectView: React.FC<ProjectViewProps> = ({ project, onBack }) => {
                                     </div>
                                 </div>
                             ))}
-                             {stage.sections.length === 0 && <p className="text-center text-gray-500 py-4">This stage has no sections.</p>}
+                             {stage.sections.length === 0 && <p className="text-center text-stone-400 py-6 italic">This stage has no sections.</p>}
                         </div>
                     </details>
                 ))}
-                {project.stages.length === 0 && <p className="text-center text-gray-500 py-8">This project has no stages defined.</p>}
+                {project.stages.length === 0 && <p className="text-center text-stone-500 py-12 bg-white rounded-xl border border-stone-200">This project has no stages defined.</p>}
             </div>
-
-            {project.stages.length > 0 && (
-                <div className="bg-white p-6 rounded-lg shadow-md border border-black flex justify-end">
-                    <div className="text-right">
-                        <p className="text-lg font-medium text-gray-600">Overall Project Total</p>
-                        <p className="text-4xl font-bold text-black">${overallTotal.toFixed(2)}</p>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

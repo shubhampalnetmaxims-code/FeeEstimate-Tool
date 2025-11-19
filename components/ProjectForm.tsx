@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Project, ProjectStage, Section, Category, SectionTask, SectionContentItem, ProjectType } from '../types';
-import { PlusIcon, TrashIcon } from './common/Icons';
+import { PlusIcon, TrashIcon, ChevronLeftIcon } from './common/Icons';
 
 interface ProjectFormProps {
     initialData: Project | null;
@@ -304,55 +304,62 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
     };
 
     const TaskRow = ({ task, onTaskChange, onDeleteTask }: { task: SectionTask, onTaskChange: (field: keyof SectionTask, value: any) => void, onDeleteTask: () => void }) => (
-        <div className="grid grid-cols-12 gap-2 items-center p-2 rounded-md hover:bg-gray-50">
+        <div className="grid grid-cols-12 gap-3 items-center p-3 rounded-lg bg-white border border-stone-100 hover:border-stone-300 hover:shadow-sm transition-all mb-2">
             <div className="col-span-4">
-                <input type="text" value={task.name} onChange={e => onTaskChange('name', e.target.value)} className="w-full px-2 py-1 border border-black rounded-md text-sm bg-white text-black" placeholder="Task Name"/>
+                <input type="text" value={task.name} onChange={e => onTaskChange('name', e.target.value)} className="w-full px-2 py-1.5 border-b border-stone-200 focus:border-stone-800 bg-transparent text-sm text-stone-900 focus:outline-none" placeholder="Task Name"/>
             </div>
             <div className="col-span-2">
-                 <input type="number" min="0" value={task.estimateHours ?? ''} onChange={e => onTaskChange('estimateHours', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-black rounded-md text-sm text-center bg-white text-black" placeholder="Hours"/>
+                 <input type="number" min="0" value={task.estimateHours ?? ''} onChange={e => onTaskChange('estimateHours', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1.5 bg-stone-50 border border-transparent rounded text-sm text-center text-stone-700 focus:bg-white focus:border-stone-300 focus:outline-none" placeholder="Hrs"/>
             </div>
             <div className="col-span-2">
-                <input type="number" min="0" value={task.estimateCost ?? ''} onChange={e => onTaskChange('estimateCost', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-black rounded-md text-sm text-center bg-white text-black" placeholder="Cost"/>
+                <input type="number" min="0" value={task.estimateCost ?? ''} onChange={e => onTaskChange('estimateCost', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1.5 bg-stone-50 border border-transparent rounded text-sm text-center text-stone-700 focus:bg-white focus:border-stone-300 focus:outline-none" placeholder="$"/>
             </div>
             <div className="col-span-2">
-                <input type="number" min="0" value={task.actualHours ?? ''} onChange={e => onTaskChange('actualHours', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-black rounded-md text-sm text-center bg-white text-black" placeholder="Hours"/>
+                <input type="number" min="0" value={task.actualHours ?? ''} onChange={e => onTaskChange('actualHours', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1.5 bg-stone-50 border border-transparent rounded text-sm text-center text-stone-700 focus:bg-white focus:border-stone-300 focus:outline-none" placeholder="Act"/>
             </div>
-            <div className="col-span-1 text-center font-semibold text-sm text-black">
-                ${calculateTaskTotal(task).toFixed(2)}
+            <div className="col-span-1 text-center font-bold text-sm text-stone-900">
+                ${calculateTaskTotal(task).toFixed(0)}
             </div>
             <div className="col-span-1 justify-self-center">
-                <button onClick={onDeleteTask} className="p-1 text-black hover:text-gray-700"><TrashIcon/></button>
+                <button onClick={onDeleteTask} className="p-1.5 text-stone-400 hover:text-red-600 rounded-md transition-colors"><TrashIcon className="h-4 w-4"/></button>
             </div>
        </div>
     );
 
     return (
-        <div className="space-y-6 pb-24">
-            <header className="mb-8">
-                 <h1 className="text-3xl font-bold text-black">
-                    {initialData?.id ? `Edit ${isCustomerView ? 'Project' : 'Template'}` : `Create New ${isCustomerView ? 'Project' : 'Template'}`}
-                 </h1>
+        <div className="space-y-8 pb-32">
+            <header className="flex items-center space-x-4 mb-8 border-b border-stone-200 pb-6">
+                <button onClick={onCancel} className="p-2 rounded-full hover:bg-stone-100 text-stone-500 transition-colors">
+                    <ChevronLeftIcon className="w-6 h-6" />
+                </button>
+                 <div>
+                    <h1 className="text-3xl font-serif font-bold text-stone-900">
+                        {initialData?.id ? `Edit ${isCustomerView ? 'Project' : 'Template'}` : `Create New ${isCustomerView ? 'Project' : 'Template'}`}
+                    </h1>
+                    <p className="text-stone-500 mt-1">Fill in the details below to configure your project.</p>
+                 </div>
             </header>
-            <div className="bg-white p-8 rounded-lg shadow-md border border-black space-y-6">
-                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div className="bg-white p-8 rounded-xl shadow-sm border border-stone-200 space-y-8">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{isCustomerView ? 'Project' : 'Template'} Name *</label>
-                        <input type="text" value={project.name} onChange={e => handleInputChange('name', e.target.value)} className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black" />
+                        <label className="block text-sm font-medium text-stone-700 mb-2">{isCustomerView ? 'Project' : 'Template'} Name *</label>
+                        <input type="text" value={project.name} onChange={e => handleInputChange('name', e.target.value)} className="w-full px-4 py-3 border border-stone-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-stone-500 focus:border-stone-500 bg-stone-50 focus:bg-white text-stone-900 transition-colors" />
                     </div>
                      <div>
-                         <label className="block text-sm font-medium text-gray-700 mb-1">Project Type</label>
+                         <label className="block text-sm font-medium text-stone-700 mb-2">Project Type</label>
                         {isCustomerView ? (
                             <input 
                                 type="text" 
                                 value={project.projectType} 
                                 readOnly
-                                className="w-full px-3 py-2 border border-black rounded-md shadow-sm bg-gray-100 text-gray-700 cursor-not-allowed" 
+                                className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-100 text-stone-500 cursor-not-allowed" 
                             />
                         ) : projectTypes ? (
                              <select
                                 value={project.projectType}
                                 onChange={e => handleInputChange('projectType', e.target.value as string)}
-                                className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
+                                className="w-full px-4 py-3 border border-stone-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-stone-500 focus:border-stone-500 bg-stone-50 focus:bg-white text-stone-900 cursor-pointer transition-colors"
                             >
                                 <option value="">-- Select a project type --</option>
                                 {projectTypes.map(pt => (
@@ -364,111 +371,117 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                                 type="text" 
                                 value={project.projectType} 
                                 onChange={e => handleInputChange('projectType', e.target.value as string)} 
-                                className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black" 
+                                className="w-full px-4 py-3 border border-stone-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-stone-500 focus:border-stone-500 bg-stone-50 focus:bg-white text-stone-900 transition-colors" 
                             />
                         )}
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Budget (USD)</label>
-                        <div className="flex items-center space-x-2">
-                            <input type="number" placeholder="Min" value={project.budgetMin ?? ''} onChange={e => handleInputChange('budgetMin', handleNumericInputChange(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
-                            <span className="text-gray-500">to</span>
-                            <input type="number" placeholder="Max" value={project.budgetMax ?? ''} onChange={e => handleInputChange('budgetMax', handleNumericInputChange(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
+                {isCustomerView && (
+                    <>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                             <div>
+                                <label className="block text-sm font-medium text-stone-700 mb-2">Budget (USD)</label>
+                                <div className="flex items-center space-x-4">
+                                    <input type="number" placeholder="Min" value={project.budgetMin ?? ''} onChange={e => handleInputChange('budgetMin', handleNumericInputChange(e.target.value))} className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500"/>
+                                    <span className="text-stone-400 font-serif italic">to</span>
+                                    <input type="number" placeholder="Max" value={project.budgetMax ?? ''} onChange={e => handleInputChange('budgetMax', handleNumericInputChange(e.target.value))} className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500"/>
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-stone-700 mb-2">Timeline (Weeks)</label>
+                                <div className="flex items-center space-x-4">
+                                     <input type="number" placeholder="Min" value={project.timelineMin ?? ''} onChange={e => handleInputChange('timelineMin', handleNumericInputChange(e.target.value))} className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500"/>
+                                    <span className="text-stone-400 font-serif italic">to</span>
+                                    <input type="number" placeholder="Max" value={project.timelineMax ?? ''} onChange={e => handleInputChange('timelineMax', handleNumericInputChange(e.target.value))} className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500"/>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Timeline (Weeks)</label>
-                        <div className="flex items-center space-x-2">
-                             <input type="number" placeholder="Min" value={project.timelineMin ?? ''} onChange={e => handleInputChange('timelineMin', handleNumericInputChange(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
-                            <span className="text-gray-500">to</span>
-                            <input type="number" placeholder="Max" value={project.timelineMax ?? ''} onChange={e => handleInputChange('timelineMax', handleNumericInputChange(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
-                        </div>
-                    </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Total Area (sq ft)</label>
-                        <input type="number" value={project.totalArea ?? ''} onChange={e => handleInputChange('totalArea', handleNumericInputChange(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
-                    </div>
-                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Quality Level</label>
-                        <select
-                            value={project.qualityLevel || ''}
-                            onChange={e => handleInputChange('qualityLevel', e.target.value as Project['qualityLevel'])}
-                            className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
-                        >
-                            <option value="" disabled>-- Select a level --</option>
-                            {Object.entries(qualityLevels).map(([level, desc]) => (
-                                <option key={level} value={level}>{level}</option>
-                            ))}
-                        </select>
-                    </div>
-                </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div>
+                                <label className="block text-sm font-medium text-stone-700 mb-2">Total Area (sq ft)</label>
+                                <input type="number" value={project.totalArea ?? ''} onChange={e => handleInputChange('totalArea', handleNumericInputChange(e.target.value))} className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500"/>
+                            </div>
+                             <div>
+                                <label className="block text-sm font-medium text-stone-700 mb-2">Quality Level</label>
+                                <select
+                                    value={project.qualityLevel || ''}
+                                    onChange={e => handleInputChange('qualityLevel', e.target.value as Project['qualityLevel'])}
+                                    className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500 cursor-pointer"
+                                >
+                                    <option value="" disabled>-- Select a level --</option>
+                                    {Object.entries(qualityLevels).map(([level, desc]) => (
+                                        <option key={level} value={level}>{level}</option>
+                                    ))}
+                                </select>
+                            </div>
+                        </div>
+                        
+                         <div>
+                            <label className="block text-sm font-medium text-stone-700 mb-2">Spaces to be Designed</label>
+                            <div className="p-4 border border-stone-200 rounded-lg bg-stone-50/50 max-h-48 overflow-y-auto">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                    {designSpaces.map(space => (
+                                        <label key={space} className="flex items-center space-x-3 p-2 hover:bg-white rounded cursor-pointer transition-colors">
+                                            <input
+                                                type="checkbox"
+                                                checked={(project.spaces || []).includes(space)}
+                                                onChange={() => handleSpaceChange(space)}
+                                                className="h-4 w-4 text-stone-900 focus:ring-stone-500 border-stone-300 rounded"
+                                            />
+                                            <span className="text-sm text-stone-700">{space}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <label className="block text-sm font-medium text-stone-700 mb-2">Client Address</label>
+                            <input type="text" value={project.clientAddress} onChange={e => handleInputChange('clientAddress', e.target.value as string)} className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500" />
+                        </div>
+                    </>
+                )}
                 
-                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Spaces to be Designed</label>
-                    <div className="p-3 border border-black rounded-md max-h-48 overflow-y-auto">
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                            {designSpaces.map(space => (
-                                <label key={space} className="flex items-center space-x-2 text-sm text-black">
-                                    <input
-                                        type="checkbox"
-                                        checked={(project.spaces || []).includes(space)}
-                                        onChange={() => handleSpaceChange(space)}
-                                        className="bg-white rounded text-black focus:ring-black border-black"
-                                    />
-                                    <span>{space}</span>
-                                </label>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Client Address</label>
-                    <input type="text" value={project.clientAddress} onChange={e => handleInputChange('clientAddress', e.target.value as string)} className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black" />
-                </div>
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Project Description</label>
-                    <textarea value={project.projectDescription} onChange={e => handleInputChange('projectDescription', e.target.value as string)} rows={3} className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black" />
+                    <label className="block text-sm font-medium text-stone-700 mb-2">Project Description</label>
+                    <textarea value={project.projectDescription} onChange={e => handleInputChange('projectDescription', e.target.value as string)} rows={4} className="w-full px-4 py-3 border border-stone-200 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-500" />
                 </div>
             </div>
 
-            <div className="space-y-4">
-                 <h2 className="text-2xl font-bold text-black">Stages</h2>
+            <div className="space-y-6">
+                 <h2 className="text-2xl font-serif font-bold text-stone-900 border-b border-stone-200 pb-2">Stages</h2>
                  {project.stages.map(stage => (
-                     <div key={stage.id} className="bg-white p-6 rounded-lg shadow-md border border-black space-y-4">
-                         <div className="flex justify-between items-center pb-2 border-b">
-                             <input type="text" value={stage.name} onChange={e => handleStageChange(stage.id, e.target.value)} className="text-2xl font-bold text-black bg-white focus:outline-none focus:bg-gray-50 p-1 rounded-md w-full" />
-                              <div className="flex items-center space-x-4">
+                     <div key={stage.id} className="bg-white p-6 rounded-xl shadow-sm border border-stone-200 space-y-6 relative overflow-hidden">
+                         <div className="absolute top-0 left-0 w-1 h-full bg-stone-900"></div>
+                         <div className="flex justify-between items-center pb-4 border-b border-stone-100">
+                             <input type="text" value={stage.name} onChange={e => handleStageChange(stage.id, e.target.value)} className="text-2xl font-serif font-bold text-stone-900 bg-transparent focus:outline-none focus:bg-stone-50 p-2 rounded-md w-full placeholder-stone-300" placeholder="Stage Name" />
+                              <div className="flex items-center space-x-6 pl-4">
                                 <div className="text-right">
-                                    <p className="text-sm font-medium text-gray-500">Stage Total</p>
-                                    <p className="text-2xl font-bold text-black">${calculateStageTotal(stage).toFixed(2)}</p>
+                                    <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Stage Total</p>
+                                    <p className="text-2xl font-bold text-stone-900 font-serif">${calculateStageTotal(stage).toFixed(2)}</p>
                                 </div>
-                                <button onClick={() => handleDeleteStage(stage.id)} className="p-2 text-gray-500 hover:bg-gray-200 hover:text-black rounded-md"><TrashIcon className="h-5 w-5"/></button>
+                                <button onClick={() => handleDeleteStage(stage.id)} className="p-2 text-stone-400 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"><TrashIcon className="h-5 w-5"/></button>
                               </div>
                          </div>
-                         <div className="space-y-4">
+                         <div className="space-y-6">
                             {stage.sections.map(section => (
-                                <div key={section.id} className="border border-black rounded-md p-4">
-                                     <div className="flex justify-between items-start">
+                                <div key={section.id} className="bg-stone-50/50 border border-stone-200 rounded-lg p-5">
+                                     <div className="flex justify-between items-start mb-4">
                                         <div>
-                                            <h3 className="text-lg font-semibold text-gray-700">{section.name}</h3>
-                                            <p className="text-sm text-gray-500 italic mb-4">{section.description}</p>
+                                            <h3 className="text-lg font-serif font-bold text-stone-800">{section.name}</h3>
+                                            <p className="text-sm text-stone-500 font-light italic">{section.description}</p>
                                         </div>
-                                        <div className="flex items-start space-x-2">
+                                        <div className="flex items-start space-x-4">
                                             <div className="text-right flex-shrink-0">
-                                                <p className="text-sm font-medium text-gray-500">Section Total</p>
-                                                <p className="text-xl font-bold text-black">${calculateSectionTotal(section).toFixed(2)}</p>
+                                                <p className="text-xs font-medium text-stone-400 uppercase">Section Total</p>
+                                                <p className="text-lg font-bold text-stone-700">${calculateSectionTotal(section).toFixed(2)}</p>
                                             </div>
                                             <button 
                                                 onClick={() => handleDeleteSectionFromStage(stage.id, section.id)} 
-                                                className="p-2 text-gray-500 hover:bg-gray-200 hover:text-black rounded-md"
+                                                className="p-1.5 text-stone-400 hover:text-red-600 rounded-md hover:bg-red-50 transition-colors"
                                                 title={`Delete section ${section.name}`}
                                             >
                                                 <TrashIcon className="h-5 w-5"/>
@@ -476,23 +489,23 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                                         </div>
                                     </div>
                                      {section.content.map((contentItem, contentIdx) => (
-                                         <div key={contentItem.categoryId} className="mt-2">
-                                              <div className="flex justify-between items-center">
-                                                <h4 className="font-semibold text-gray-600">{contentItem.name}</h4>
-                                                <button onClick={() => handleDeleteCategoryFromSection(stage.id, section.id, contentItem.categoryId)} className="p-1 text-black hover:bg-gray-200 rounded-md" title={`Remove ${contentItem.name} category`}>
+                                         <div key={contentItem.categoryId} className="mt-4 bg-white border border-stone-100 rounded-lg p-4 shadow-sm">
+                                              <div className="flex justify-between items-center mb-3">
+                                                <h4 className="font-bold text-stone-600 uppercase text-xs tracking-wider">{contentItem.name}</h4>
+                                                <button onClick={() => handleDeleteCategoryFromSection(stage.id, section.id, contentItem.categoryId)} className="p-1 text-stone-300 hover:text-red-500 transition-colors" title={`Remove ${contentItem.name} category`}>
                                                     <TrashIcon className="h-4 w-4"/>
                                                 </button>
                                             </div>
-                                             <div className="grid grid-cols-12 gap-2 items-center mt-2 pl-2 pr-2 md:pl-6 md:pr-4 text-xs font-bold text-gray-500 uppercase">
-                                                <div className="col-span-4">Task Name</div>
-                                                <div className="col-span-2 text-center">Estimated Hours</div>
-                                                <div className="col-span-2 text-center">Cost/Hr ($)</div>
-                                                <div className="col-span-2 text-center">Actual Hours</div>
-                                                <div className="col-span-1 text-center">Total ($)</div>
+                                             <div className="grid grid-cols-12 gap-3 items-center mb-2 px-3 text-[10px] font-bold text-stone-400 uppercase tracking-widest">
+                                                <div className="col-span-4">Task</div>
+                                                <div className="col-span-2 text-center">Est Hrs</div>
+                                                <div className="col-span-2 text-center">Cost/Hr</div>
+                                                <div className="col-span-2 text-center">Act Hrs</div>
+                                                <div className="col-span-1 text-center">Total</div>
                                                 <div className="col-span-1"></div>
                                             </div>
 
-                                             <div className="pl-4 mt-1 space-y-2">
+                                             <div className="space-y-2">
                                                  {contentItem.tasks.map((task, taskIdx) => (
                                                      <TaskRow 
                                                         key={task.id}
@@ -501,13 +514,13 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                                                         onDeleteTask={() => handleDeleteTask(stage.id, section.id, contentIdx, task.id, null)}
                                                      />
                                                  ))}
-                                                 <button onClick={() => handleAddTask(stage.id, section.id, contentIdx, null)} className="text-sm font-medium text-black hover:text-gray-700">+ Add Task</button>
+                                                 <button onClick={() => handleAddTask(stage.id, section.id, contentIdx, null)} className="text-xs font-bold text-stone-500 hover:text-stone-800 uppercase tracking-wide py-1">+ Add Task</button>
                                              </div>
 
                                               {contentItem.subcategories.map((sub, subIdx) => (
-                                                 <div key={sub.id} className="pl-4 mt-2">
-                                                     <h5 className="font-medium text-gray-600">{sub.name}</h5>
-                                                     <div className="pl-4 mt-1 space-y-2">
+                                                 <div key={sub.id} className="mt-4 pl-4 border-l-2 border-stone-100">
+                                                     <h5 className="font-medium text-stone-600 text-sm mb-2">{sub.name}</h5>
+                                                     <div className="space-y-2">
                                                          {sub.tasks.map((task, taskIdx) => (
                                                               <TaskRow 
                                                                 key={task.id}
@@ -516,13 +529,13 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                                                                 onDeleteTask={() => handleDeleteTask(stage.id, section.id, contentIdx, task.id, subIdx)}
                                                              />
                                                          ))}
-                                                         <button onClick={() => handleAddTask(stage.id, section.id, contentIdx, subIdx)} className="text-sm font-medium text-black hover:text-gray-700">+ Add Task</button>
+                                                         <button onClick={() => handleAddTask(stage.id, section.id, contentIdx, subIdx)} className="text-xs font-bold text-stone-500 hover:text-stone-800 uppercase tracking-wide py-1">+ Add Task</button>
                                                      </div>
                                                  </div>
                                               ))}
                                          </div>
                                      ))}
-                                     <div className="mt-4 pl-4">
+                                     <div className="mt-6 pt-4 border-t border-stone-200/50">
                                         <select 
                                             onChange={e => {
                                                 if (e.target.value) {
@@ -531,9 +544,9 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                                                 e.target.value = "";
                                             }}
                                             value=""
-                                            className="text-sm bg-white text-black border border-black rounded-md focus:ring-black focus:border-black"
+                                            className="text-sm bg-white text-stone-700 border border-stone-300 rounded-md px-3 py-2 focus:ring-stone-500 focus:border-stone-500 w-full md:w-auto"
                                         >
-                                            <option value="" disabled>-- Add category to section --</option>
+                                            <option value="" disabled>+ Add Category to Section</option>
                                             {categories
                                                 .filter(cat => !section.content.some(c => c.categoryId === cat.id))
                                                 .map(cat => (
@@ -546,29 +559,29 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                             ))}
                          </div>
                          <div>
-                            <select onChange={e => {handleAddSectionToStage(stage.id, e.target.value); e.target.value = ""}} value="" className="mt-2 text-sm bg-white text-black border-black rounded-md focus:ring-black focus:border-black">
-                                <option value="" disabled>-- Add a section from templates --</option>
+                            <select onChange={e => {handleAddSectionToStage(stage.id, e.target.value); e.target.value = ""}} value="" className="w-full mt-2 text-sm bg-stone-50 text-stone-700 border border-stone-300 border-dashed rounded-lg py-3 px-4 hover:bg-white hover:border-stone-400 transition-colors cursor-pointer">
+                                <option value="" disabled>+ Add Section from Templates</option>
                                 {sections.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                             </select>
                          </div>
                      </div>
                  ))}
-                 <button onClick={handleAddStage} className="flex items-center space-x-2 bg-white text-black border border-black font-semibold px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                 <button onClick={handleAddStage} className="w-full py-4 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 font-medium hover:border-stone-800 hover:text-stone-800 transition-all flex justify-center items-center space-x-2 bg-stone-50 hover:bg-white">
                      <PlusIcon />
-                     <span>Add Stage</span>
+                     <span>Add New Stage</span>
                  </button>
             </div>
 
-            <div className="sticky bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-black z-10">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                     <div className="flex justify-between items-center py-4">
-                        <div className="text-right flex-1">
-                            <p className="text-lg font-medium text-gray-600">Overall Project Total</p>
-                            <p className="text-3xl font-bold text-black">${calculateOverallTotal(project).toFixed(2)}</p>
+            <div className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-stone-200 z-20 shadow-lg">
+                <div className="max-w-7xl mx-auto px-6 py-4">
+                     <div className="flex justify-between items-center">
+                        <div className="flex-1">
+                            <p className="text-sm font-medium text-stone-500 uppercase tracking-wide">Overall Project Total</p>
+                            <p className="text-3xl font-serif font-bold text-stone-900">${calculateOverallTotal(project).toFixed(2)}</p>
                         </div>
-                        <div className="flex items-center ml-8">
-                            <button onClick={onCancel} className="px-4 py-2 text-black bg-white border border-black rounded-md mr-2 hover:bg-gray-100">Cancel</button>
-                            <button onClick={handleSubmit} className="px-6 py-2 text-white bg-black rounded-md hover:bg-gray-800">Save</button>
+                        <div className="flex items-center space-x-4">
+                            <button onClick={onCancel} className="px-6 py-2.5 text-stone-700 bg-white border border-stone-300 rounded-lg hover:bg-stone-50 font-medium transition-colors">Cancel</button>
+                            <button onClick={handleSubmit} className="px-8 py-2.5 text-white bg-stone-900 rounded-lg hover:bg-stone-800 font-medium shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-0.5">Save Project</button>
                         </div>
                     </div>
                 </div>

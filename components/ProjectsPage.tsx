@@ -118,7 +118,7 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, setProjects, cate
 
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8 animate-fadeIn">
             {projectToDelete && (
                  <ConfirmationModal
                     onClose={() => setProjectToDelete(null)}
@@ -127,38 +127,39 @@ const ProjectsPage: React.FC<ProjectsPageProps> = ({ projects, setProjects, cate
                     message={`Are you sure you want to delete "${projectToDelete.name}"? This action is permanent.`}
                 />
             )}
-            <header className="flex justify-between items-center mb-8">
-                <div>
-                    <h1 className="text-3xl font-bold text-black">{pageTitle}</h1>
-                    <p className="text-gray-600 mt-1">{pageDescription}</p>
-                </div>
-                 <button onClick={handleCreateNew} className="flex items-center space-x-2 bg-black text-white font-semibold px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
-                    <PlusIcon />
+            <div className="flex justify-between items-center">
+                 <div>
+                    {/* Header is handled by parent usually but good to have context */}
+                 </div>
+                 <button onClick={handleCreateNew} className="flex items-center space-x-2 bg-stone-900 text-white font-medium px-5 py-2.5 rounded-lg hover:bg-stone-800 transition-all shadow-md hover:shadow-lg">
+                    <PlusIcon className="h-5 w-5 text-white"/>
                     <span>{createButtonText}</span>
                 </button>
-            </header>
+            </div>
             
-            <div className="bg-white rounded-lg shadow-md border border-black">
-                <div className="p-6 space-y-4">
+            <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden">
+                <div className="p-0">
                     {projects.length === 0 ? (
-                        <div className="text-center py-12">
-                            <p className="text-gray-600">{emptyStateText}</p>
-                            <button onClick={handleCreateNew} className="mt-2 font-semibold text-black hover:underline">
+                        <div className="text-center py-16 bg-stone-50">
+                            <p className="text-stone-500 mb-2 text-lg font-light">{emptyStateText}</p>
+                            <button onClick={handleCreateNew} className="font-medium text-stone-900 hover:text-stone-700 hover:underline underline-offset-4 decoration-stone-400">
                                 {createFirstText}
                             </button>
                         </div>
                     ) : (
-                        <ul className="divide-y divide-black">
-                            {projects.map(project => (
-                                <li key={project.id} className="py-4 flex justify-between items-center">
-                                    <div>
-                                        <p className="text-lg font-semibold text-black">{project.name}</p>
-                                        <p className="text-sm text-gray-600">{project.projectType}</p>
+                        <ul className="divide-y divide-stone-100">
+                            {projects.map((project, index) => (
+                                <li key={project.id} className={`p-6 flex justify-between items-center hover:bg-stone-50 transition-colors ${index % 2 === 0 ? 'bg-white' : 'bg-stone-50/30'}`}>
+                                    <div className="flex-1">
+                                        <p className="text-xl font-serif font-bold text-stone-900 mb-1">{project.name}</p>
+                                        <span className="inline-block bg-stone-100 text-stone-600 text-xs px-2 py-1 rounded-full font-medium tracking-wide uppercase border border-stone-200">
+                                            {project.projectType || 'Uncategorized'}
+                                        </span>
                                     </div>
-                                    <div className="flex items-center space-x-2">
-                                        <button onClick={() => handleView(project)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="View"><EyeIcon className="h-5 w-5"/></button>
-                                        <button onClick={() => handleEdit(project)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="Edit"><PencilIcon className="h-5 w-5"/></button>
-                                        <button onClick={() => handleDeleteRequest(project)} className="p-2 text-gray-500 hover:bg-gray-200 hover:text-black rounded-md" title="Delete"><TrashIcon className="h-5 w-5"/></button>
+                                    <div className="flex items-center space-x-3">
+                                        <button onClick={() => handleView(project)} className="p-2 text-stone-400 hover:text-stone-700 hover:bg-white rounded-full border border-transparent hover:border-stone-200 transition-all shadow-sm" title="View"><EyeIcon className="h-5 w-5"/></button>
+                                        <button onClick={() => handleEdit(project)} className="p-2 text-stone-400 hover:text-stone-700 hover:bg-white rounded-full border border-transparent hover:border-stone-200 transition-all shadow-sm" title="Edit"><PencilIcon className="h-5 w-5"/></button>
+                                        <button onClick={() => handleDeleteRequest(project)} className="p-2 text-stone-400 hover:text-red-600 hover:bg-white rounded-full border border-transparent hover:border-red-100 transition-all shadow-sm" title="Delete"><TrashIcon className="h-5 w-5"/></button>
                                     </div>
                                 </li>
                             ))}

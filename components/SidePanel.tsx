@@ -19,37 +19,37 @@ const SidePanel: React.FC<SidePanelProps> = ({ onLogout, activeView, setActiveVi
     ];
 
     return (
-        <aside className="w-64 min-h-screen bg-white text-black flex flex-col shadow-lg flex-shrink-0 border-r border-black">
-            <div className="h-20 flex items-center justify-center border-b border-black">
-                <h1 className="text-2xl font-bold tracking-wider">Designer's Hub</h1>
+        <aside className="w-64 min-h-screen bg-stone-900 text-stone-200 flex flex-col shadow-2xl flex-shrink-0 transition-all">
+            <div className="h-24 flex items-center justify-center border-b border-stone-800">
+                <h1 className="text-2xl font-serif font-bold tracking-wide text-stone-50">Designer's Hub</h1>
             </div>
-            <nav className="flex-1 px-4 py-6">
-                <ul className="space-y-2">
+            <nav className="flex-1 px-4 py-8">
+                <ul className="space-y-1">
                     {navItems.map((item) => (
                         <li key={item.label}>
                             <a href="#"
                                onClick={(e) => { e.preventDefault(); setActiveView(item.label); }}
-                               className={`flex items-center space-x-3 p-3 rounded-lg transition-colors duration-200 ${activeView === item.label ? 'bg-gray-100' : 'hover:bg-gray-100'}`}>
-                                <item.icon />
-                                <span>{item.label}</span>
+                               className={`flex items-center space-x-3 p-3 rounded-md transition-all duration-200 group ${activeView === item.label ? 'bg-stone-800 text-white shadow-md' : 'text-stone-400 hover:bg-stone-800/50 hover:text-stone-200'}`}>
+                                <item.icon className={`h-5 w-5 transition-colors ${activeView === item.label ? 'text-white' : 'text-stone-500 group-hover:text-stone-300'}`} />
+                                <span className="font-medium text-sm tracking-wide">{item.label}</span>
                             </a>
                         </li>
                     ))}
                 </ul>
             </nav>
-            <div className="p-4 border-t border-black">
+            <div className="p-4 border-t border-stone-800 bg-stone-900">
                 <button
                     onClick={onLogout}
-                    className="flex items-center space-x-3 p-3 mb-4 rounded-lg transition-colors duration-200 hover:bg-gray-100 w-full text-left"
+                    className="flex items-center space-x-3 p-3 mb-4 rounded-md transition-colors duration-200 hover:bg-stone-800 w-full text-left text-stone-400 hover:text-white"
                 >
-                    <LogoutIcon />
-                    <span>Logout</span>
+                    <LogoutIcon className="h-5 w-5" />
+                    <span className="text-sm font-medium">Logout</span>
                 </button>
-                <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-black text-white flex items-center justify-center font-bold">A</div>
+                <div className="flex items-center space-x-3 px-2">
+                    <div className="w-10 h-10 rounded-full bg-stone-700 text-white flex items-center justify-center font-serif font-bold border border-stone-600">A</div>
                     <div>
-                        <p className="font-semibold text-sm">Admin User</p>
-                        <p className="text-xs text-gray-600">View Profile</p>
+                        <p className="font-semibold text-sm text-stone-200">Admin User</p>
+                        <p className="text-xs text-stone-500 hover:text-stone-400 cursor-pointer">View Profile</p>
                     </div>
                 </div>
             </div>

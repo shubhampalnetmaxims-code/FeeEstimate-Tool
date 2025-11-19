@@ -36,9 +36,9 @@ const CustomerDashboardPage: React.FC<CustomerDashboardPageProps> = ({ onLogout,
   };
 
   return (
-    <div className="flex bg-white min-h-screen">
+    <div className="flex bg-stone-50 min-h-screen font-sans text-stone-800">
       <CustomerSidePanel onLogout={onLogout} customer={customer} activeView={activeView} setActiveView={setActiveView} />
-      <main className="flex-1 p-4 sm:p-6 lg:p-10 overflow-auto h-screen">
+      <main className="flex-1 p-6 lg:p-10 overflow-auto h-screen">
         {renderActiveView()}
       </main>
     </div>

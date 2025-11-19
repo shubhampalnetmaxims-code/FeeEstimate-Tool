@@ -23,9 +23,7 @@ const qualityLevels: { [key: string]: string } = {
 
 // Calculations
 const calculateTaskTotal = (task: SectionTask) => {
-    // Logic: If user enters estimated hours (actualHours), use it. Otherwise use suggested (estimateHours).
     const userHours = task.actualHours;
-    // Check if user has entered a value (number or 0, but not undefined/null/empty)
     const hasUserHours = userHours !== undefined && userHours !== null; 
     const hours = hasUserHours ? Number(userHours) : (task.estimateHours || 0);
     const cost = task.estimateCost || 0;
@@ -54,16 +52,16 @@ const calculateStageTotal = (stage: ProjectStage) => {
 const Stepper = ({ currentStep }: { currentStep: number }) => {
     const steps = ['Basic Information', 'Spaces & Details', 'Project Stages', 'Preview'];
     return (
-        <div className="flex items-center mb-8">
+        <div className="flex items-center justify-center mb-10 px-4">
             {steps.map((step, index) => (
                 <React.Fragment key={step}>
-                    <div className="flex items-center">
-                        <div className={`flex items-center justify-center w-8 h-8 rounded-full ${index + 1 <= currentStep ? 'bg-black text-white' : 'bg-gray-200 text-gray-600'}`}>
-                            {index + 1}
+                    <div className="flex flex-col items-center z-10">
+                        <div className={`flex items-center justify-center w-10 h-10 rounded-full border-2 transition-all duration-300 ${index + 1 <= currentStep ? 'bg-stone-900 border-stone-900 text-white' : 'bg-white border-stone-300 text-stone-400'}`}>
+                            <span className="font-serif font-bold">{index + 1}</span>
                         </div>
-                        <span className={`ml-2 text-sm font-medium ${index + 1 <= currentStep ? 'text-black' : 'text-gray-500'}`}>{step}</span>
+                        <span className={`mt-2 text-xs font-bold uppercase tracking-wider transition-colors duration-300 ${index + 1 <= currentStep ? 'text-stone-900' : 'text-stone-400'}`}>{step}</span>
                     </div>
-                    {index < steps.length - 1 && <div className="flex-auto border-t-2 transition duration-500 ease-in-out mx-4 border-gray-300"></div>}
+                    {index < steps.length - 1 && <div className={`flex-1 h-0.5 mx-2 -mt-6 transition-colors duration-500 ${index + 1 < currentStep ? 'bg-stone-900' : 'bg-stone-200'}`}></div>}
                 </React.Fragment>
             ))}
         </div>
@@ -79,12 +77,12 @@ const TaskRow = ({ task, onTaskChange, onDeleteTask }: { task: SectionTask, onTa
     };
 
     return (
-        <div className="grid grid-cols-12 gap-2 items-center p-2 rounded-md hover:bg-gray-50 bg-white border border-gray-100 mb-1">
+        <div className="grid grid-cols-12 gap-2 items-center p-3 rounded-md bg-white border border-stone-100 hover:border-stone-300 hover:shadow-sm mb-1 transition-all">
             <div className="col-span-4 md:col-span-3">
-                <input type="text" value={task.name} onChange={e => onTaskChange('name', e.target.value)} className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm bg-white text-black focus:ring-1 focus:ring-black focus:border-black" placeholder="Task Name"/>
+                <input type="text" value={task.name} onChange={e => onTaskChange('name', e.target.value)} className="w-full px-2 py-1.5 border border-stone-200 rounded-md text-sm bg-white text-stone-900 focus:ring-1 focus:ring-stone-900 focus:border-stone-900" placeholder="Task Name"/>
             </div>
             <div className="col-span-2 md:col-span-2 text-center">
-                 <div className="w-full px-2 py-1 bg-gray-100 border border-transparent rounded-md text-sm text-gray-600 cursor-not-allowed font-medium" title="Suggested Hours (from Template)">
+                 <div className="w-full px-2 py-1.5 bg-stone-50 border border-transparent rounded-md text-sm text-stone-500 cursor-not-allowed font-medium" title="Suggested Hours (from Template)">
                     {task.estimateHours}
                  </div>
             </div>
@@ -94,7 +92,7 @@ const TaskRow = ({ task, onTaskChange, onDeleteTask }: { task: SectionTask, onTa
                     min="0" 
                     value={task.actualHours ?? ''} 
                     onChange={e => onTaskChange('actualHours', handleNumericInputChange(e.target.value))} 
-                    className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-center bg-white text-black focus:ring-1 focus:ring-black focus:border-black placeholder-gray-300" 
+                    className="w-full px-2 py-1.5 border border-stone-200 rounded-md text-sm text-center bg-white text-stone-900 focus:ring-1 focus:ring-stone-900 focus:border-stone-900 placeholder-stone-300" 
                     placeholder={task.estimateHours.toString()}
                     title="Your Estimate (Leave blank to use Suggested)"
                  />
@@ -105,15 +103,15 @@ const TaskRow = ({ task, onTaskChange, onDeleteTask }: { task: SectionTask, onTa
                     min="0" 
                     value={task.estimateCost ?? ''} 
                     onChange={e => onTaskChange('estimateCost', handleNumericInputChange(e.target.value))} 
-                    className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-center bg-white text-black focus:ring-1 focus:ring-black focus:border-black" 
+                    className="w-full px-2 py-1.5 border border-stone-200 rounded-md text-sm text-center bg-white text-stone-900 focus:ring-1 focus:ring-stone-900 focus:border-stone-900" 
                     placeholder="$"
                 />
             </div>
-            <div className="col-span-2 md:col-span-2 text-center font-bold text-sm text-black">
+            <div className="col-span-2 md:col-span-2 text-center font-bold text-sm text-stone-900">
                 ${calculateTaskTotal(task).toFixed(0)}
             </div>
             <div className="col-span-1 justify-self-center">
-                <button onClick={onDeleteTask} className="p-1 text-gray-400 hover:text-red-600 transition-colors"><TrashIcon className="h-4 w-4"/></button>
+                <button onClick={onDeleteTask} className="p-1 text-stone-400 hover:text-red-600 transition-colors"><TrashIcon className="h-4 w-4"/></button>
             </div>
        </div>
     );
@@ -126,18 +124,18 @@ const PreviewTaskRow = ({ task }: { task: SectionTask }) => {
     const hoursUsed = hasUserHours ? Number(userHours) : (task.estimateHours || 0);
 
     return (
-        <tr className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50">
-            <td className="py-2 px-2 text-black text-sm">{task.name}</td>
-            <td className="py-2 px-2 text-center text-gray-600 text-sm">{task.estimateHours}</td>
+        <tr className="border-b border-stone-100 last:border-b-0 hover:bg-stone-50/50 transition-colors">
+            <td className="py-2 px-2 text-stone-800 text-sm">{task.name}</td>
+            <td className="py-2 px-2 text-center text-stone-500 text-sm">{task.estimateHours}</td>
             <td className="py-2 px-2 text-center text-sm">
                 {hasUserHours ? (
-                    <span className="font-bold text-black">{userHours}</span>
+                    <span className="font-bold text-stone-900">{userHours}</span>
                 ) : (
-                    <span className="text-gray-400 italic" title="Using Suggested">{task.estimateHours}</span>
+                    <span className="text-stone-300 italic" title="Using Suggested">{task.estimateHours}</span>
                 )}
             </td>
-            <td className="py-2 px-2 text-center text-gray-600 text-sm">${task.estimateCost?.toFixed(0)}</td>
-            <td className="py-2 px-2 text-center font-bold text-black text-sm">${(hoursUsed * (task.estimateCost || 0)).toFixed(0)}</td>
+            <td className="py-2 px-2 text-center text-stone-500 text-sm">${task.estimateCost?.toFixed(0)}</td>
+            <td className="py-2 px-2 text-center font-bold text-stone-900 text-sm">${(hoursUsed * (task.estimateCost || 0)).toFixed(0)}</td>
         </tr>
     );
 };
@@ -393,61 +391,59 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
     };
 
     const renderStep1 = () => (
-        <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">1. Basic Information</h3>
+        <div className="space-y-6 max-w-2xl mx-auto">
+            <h3 className="text-2xl font-serif font-bold text-stone-900 mb-6 text-center">Basic Information</h3>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Project Name *</label>
-                <input type="text" value={projectName} onChange={e => setProjectName(e.target.value)} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black" />
+                <label className="block text-sm font-bold text-stone-700 mb-2">Project Name *</label>
+                <input type="text" value={projectName} onChange={e => setProjectName(e.target.value)} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800 transition-colors" placeholder="e.g., Seaside Villa Renovation" />
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Total Budget (USD) *</label>
-                <div className="flex items-center space-x-2">
-                    <input type="number" placeholder="Min" value={budgetMin} onChange={e => setBudgetMin(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
-                    <span className="text-gray-500">to</span>
-                    <input type="number" placeholder="Max" value={budgetMax} onChange={e => setBudgetMax(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
+                <label className="block text-sm font-bold text-stone-700 mb-2">Total Budget (USD) *</label>
+                <div className="flex items-center space-x-4">
+                    <input type="number" placeholder="Min" value={budgetMin} onChange={e => setBudgetMin(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800"/>
+                    <span className="text-stone-400 font-serif italic">to</span>
+                    <input type="number" placeholder="Max" value={budgetMax} onChange={e => setBudgetMax(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800"/>
                 </div>
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Timeline (Weeks) *</label>
-                <div className="flex items-center space-x-2">
-                     <input type="number" placeholder="Min" value={timelineMin} onChange={e => setTimelineMin(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
-                    <span className="text-gray-500">to</span>
-                    <input type="number" placeholder="Max" value={timelineMax} onChange={e => setTimelineMax(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
+                <label className="block text-sm font-bold text-stone-700 mb-2">Timeline (Weeks) *</label>
+                <div className="flex items-center space-x-4">
+                     <input type="number" placeholder="Min" value={timelineMin} onChange={e => setTimelineMin(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800"/>
+                    <span className="text-stone-400 font-serif italic">to</span>
+                    <input type="number" placeholder="Max" value={timelineMax} onChange={e => setTimelineMax(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800"/>
                 </div>
             </div>
         </div>
     );
     
     const renderStep2 = () => (
-         <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">2. Spaces & Project Details</h3>
+         <div className="space-y-6 max-w-3xl mx-auto">
+            <h3 className="text-2xl font-serif font-bold text-stone-900 mb-6 text-center">Spaces & Details</h3>
             <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">Spaces to be Designed *</label>
-                 <div className="p-3 border border-black rounded-md max-h-40 overflow-y-auto">
-                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                 <label className="block text-sm font-bold text-stone-700 mb-2">Spaces to be Designed *</label>
+                 <div className="p-4 border border-stone-200 rounded-xl bg-stone-50/50 max-h-64 overflow-y-auto">
+                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                          {designSpaces.map(space => (
-                             <label key={space} className="flex items-center space-x-2 text-sm">
-                                 <input type="checkbox" checked={selectedSpaces.includes(space)} onChange={() => handleSpaceToggle(space)} className="bg-white rounded text-black focus:ring-black border-black"/>
-                                 <span className="text-black">{space}</span>
+                             <label key={space} className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-all ${selectedSpaces.includes(space) ? 'bg-stone-800 text-white shadow-md' : 'bg-white border border-stone-100 hover:border-stone-300 text-stone-700'}`}>
+                                 <input type="checkbox" checked={selectedSpaces.includes(space)} onChange={() => handleSpaceToggle(space)} className="hidden"/>
+                                 <span className="text-sm font-medium">{space}</span>
                              </label>
                          ))}
                      </div>
                  </div>
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Total Area (sq ft) *</label>
-                <input type="number" value={totalArea} onChange={e => setTotalArea(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
+                <label className="block text-sm font-bold text-stone-700 mb-2">Total Area (sq ft) *</label>
+                <input type="number" value={totalArea} onChange={e => setTotalArea(e.target.value === '' ? '' : Number(e.target.value))} className="w-full px-4 py-3 border border-stone-300 rounded-lg bg-stone-50 focus:bg-white text-stone-900 focus:outline-none focus:border-stone-800"/>
             </div>
             <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Quality Level *</label>
-                <div className="space-y-2">
+                <label className="block text-sm font-bold text-stone-700 mb-2">Quality Level *</label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {Object.entries(qualityLevels).map(([level, desc]) => (
-                         <label key={level} className={`flex items-center p-3 border rounded-lg cursor-pointer transition-all ${qualityLevel === level ? 'border-black ring-1 ring-black' : 'border-black'}`}>
-                            <input type="radio" name="quality" value={level} checked={qualityLevel === level} onChange={() => setQualityLevel(level as any)} className="h-4 w-4 text-black focus:ring-black border-black"/>
-                            <div className="ml-3">
-                                <span className="font-semibold text-black">{level}</span>
-                                <p className="text-xs text-gray-600">{desc}</p>
-                            </div>
+                         <label key={level} className={`flex flex-col p-4 border rounded-xl cursor-pointer transition-all text-center h-full justify-center hover:shadow-md ${qualityLevel === level ? 'border-stone-900 bg-stone-900 text-white shadow-lg transform scale-105' : 'border-stone-200 bg-white text-stone-900 hover:border-stone-400'}`}>
+                            <input type="radio" name="quality" value={level} checked={qualityLevel === level} onChange={() => setQualityLevel(level as any)} className="hidden"/>
+                            <span className="font-serif font-bold text-lg mb-1">{level}</span>
+                            <p className={`text-xs ${qualityLevel === level ? 'text-stone-300' : 'text-stone-500'}`}>{desc}</p>
                         </label>
                     ))}
                 </div>
@@ -456,87 +452,94 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
     );
 
     const renderStep3 = () => (
-        <div className="space-y-4">
-            <div className="flex justify-between items-center mb-4">
-                 <h3 className="text-xl font-semibold text-gray-700">3. Project Stages</h3>
+        <div className="space-y-6 h-full flex flex-col">
+            <div className="flex justify-between items-center mb-4 pb-4 border-b border-stone-200">
+                 <h3 className="text-xl font-serif font-bold text-stone-900">3. Project Stages</h3>
                  {selectedTemplate && (
-                     <button onClick={() => {setSelectedTemplate(null); setStage3View('template');}} className="text-sm text-blue-600 hover:underline">Change Template</button>
+                     <button onClick={() => {setSelectedTemplate(null); setStage3View('template');}} className="text-sm text-stone-500 hover:text-stone-900 underline">Change Template</button>
                  )}
             </div>
             
+            <div className="flex-1 overflow-y-auto pr-2">
             {stage3View === 'type' ? (
-                <>
-                    <h4 className="font-medium text-gray-600">Choose a Project Type</h4>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="max-w-2xl mx-auto">
+                    <h4 className="font-medium text-stone-600 mb-4 text-center">Choose a Project Type</h4>
+                    <div className="grid grid-cols-2 gap-4 mb-8">
                         {projectTypes.map(type => (
-                            <button key={type.id} onClick={() => { setSelectedTypeId(type.id); setCustomTypeName(''); setStage3View('template'); }} className="text-center p-3 border border-black rounded-lg hover:shadow-md hover:bg-gray-50">
-                                <span className="font-semibold text-black">{type.name}</span>
+                            <button key={type.id} onClick={() => { setSelectedTypeId(type.id); setCustomTypeName(''); setStage3View('template'); }} className="text-center p-6 border border-stone-200 rounded-xl hover:shadow-lg hover:border-stone-400 hover:bg-white transition-all bg-stone-50 group">
+                                <span className="font-serif font-bold text-lg text-stone-800 group-hover:text-stone-900">{type.name}</span>
                             </button>
                         ))}
                     </div>
-                    <div className="text-center my-2 text-gray-500 text-sm">OR</div>
-                    <form onSubmit={(e) => { e.preventDefault(); if(customTypeName.trim()){ setSelectedTypeId(null); setStage3View('template');} }} className="flex gap-2">
-                        <input type="text" placeholder="Define a custom type..." value={customTypeName} onChange={(e) => setCustomTypeName(e.target.value)} className="flex-grow px-3 py-2 border border-black rounded-md bg-white text-black"/>
-                        <button type="submit" disabled={!customTypeName.trim()} className="px-4 py-2 text-white bg-black rounded-md hover:bg-gray-800 disabled:bg-gray-400">Next</button>
+                    <div className="relative flex py-5 items-center">
+                        <div className="flex-grow border-t border-stone-200"></div>
+                        <span className="flex-shrink-0 mx-4 text-stone-400 text-sm font-serif italic">OR</span>
+                        <div className="flex-grow border-t border-stone-200"></div>
+                    </div>
+                    <form onSubmit={(e) => { e.preventDefault(); if(customTypeName.trim()){ setSelectedTypeId(null); setStage3View('template');} }} className="flex gap-3">
+                        <input type="text" placeholder="Define a custom type..." value={customTypeName} onChange={(e) => setCustomTypeName(e.target.value)} className="flex-grow px-4 py-3 border border-stone-300 rounded-lg bg-white text-stone-900 focus:outline-none focus:border-stone-800"/>
+                        <button type="submit" disabled={!customTypeName.trim()} className="px-6 py-3 text-white bg-stone-900 rounded-lg hover:bg-stone-800 disabled:bg-stone-300 transition-colors">Next</button>
                     </form>
-                </>
+                </div>
             ) : !selectedTemplate ? (
-                <>
-                    <button onClick={() => setStage3View('type')} className="text-sm font-medium text-black hover:text-gray-700 mb-2">&larr; Back to Types</button>
-                    <h4 className="font-medium text-gray-600">Select a Starting Point for <span className="font-bold">"{currentProjectTypeName}"</span></h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-60 overflow-y-auto p-1">
-                        <div onClick={() => setSelectedTemplate('BLANK')} className={`p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50`}>
-                            <h5 className="font-bold text-black">Start with a blank project</h5>
-                            <p className="text-sm text-gray-600">Build your project from the ground up.</p>
+                <div className="max-w-3xl mx-auto">
+                    <button onClick={() => setStage3View('type')} className="text-sm font-medium text-stone-500 hover:text-stone-900 mb-4 flex items-center space-x-1">
+                        <span>&larr;</span><span>Back to Types</span>
+                    </button>
+                    <h4 className="font-serif font-medium text-stone-800 text-xl mb-6 text-center">Select a Starting Point for <span className="font-bold italic">"{currentProjectTypeName}"</span></h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div onClick={() => setSelectedTemplate('BLANK')} className={`p-6 border-2 border-stone-200 rounded-xl cursor-pointer hover:border-stone-800 hover:bg-white hover:shadow-md transition-all bg-stone-50 group`}>
+                            <h5 className="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-stone-800">Start with a blank project</h5>
+                            <p className="text-sm text-stone-500">Build your project from the ground up.</p>
                         </div>
                         {filteredTemplates.map(template => (
-                            <div key={template.id} onClick={() => setSelectedTemplate(template)} className={`p-4 border-2 rounded-lg cursor-pointer hover:bg-gray-50`}>
-                                <h5 className="font-bold text-black">{template.name}</h5>
-                                <p className="text-sm text-gray-600 line-clamp-2">{template.projectDescription}</p>
+                            <div key={template.id} onClick={() => setSelectedTemplate(template)} className={`p-6 border-2 border-stone-200 rounded-xl cursor-pointer hover:border-stone-800 hover:bg-white hover:shadow-md transition-all bg-stone-50 group`}>
+                                <h5 className="font-serif font-bold text-lg text-stone-900 mb-2 group-hover:text-stone-800">{template.name}</h5>
+                                <p className="text-sm text-stone-500 line-clamp-2">{template.projectDescription}</p>
                             </div>
                         ))}
-                        {selectedTypeId && filteredTemplates.length === 0 && <p className="text-gray-500 text-center col-span-2">No templates found. Start blank or go back.</p>}
+                        {selectedTypeId && filteredTemplates.length === 0 && <p className="text-stone-400 text-center col-span-2 italic py-8">No templates found for this type. Start blank.</p>}
                     </div>
-                </>
+                </div>
             ) : (
-                <div className="space-y-6">
+                <div className="space-y-8">
                      {/* Full Editor UI */}
                      {stages.map((stage, stageIdx) => (
-                         <div key={stage.id} className="bg-white p-4 rounded-lg shadow-sm border border-gray-300 space-y-4">
-                             <div className="flex justify-between items-center pb-2 border-b border-gray-200">
-                                 <input type="text" value={stage.name} onChange={e => handleStageNameChange(stageIdx, e.target.value)} className="text-lg font-bold text-black bg-white focus:outline-none focus:bg-gray-50 p-1 rounded-md w-full" placeholder="Stage Name"/>
+                         <div key={stage.id} className="bg-white p-6 rounded-xl shadow-sm border border-stone-200 space-y-6">
+                             <div className="flex justify-between items-center pb-3 border-b border-stone-100">
+                                 <input type="text" value={stage.name} onChange={e => handleStageNameChange(stageIdx, e.target.value)} className="text-xl font-serif font-bold text-stone-900 bg-transparent focus:outline-none focus:bg-stone-50 p-2 rounded-md w-full" placeholder="Stage Name"/>
                                  <div className="flex items-center space-x-4">
                                     <div className="text-right flex-shrink-0">
-                                        <p className="text-xs font-medium text-gray-500">Total</p>
-                                        <p className="text-lg font-bold text-black">${calculateStageTotal(stage).toFixed(0)}</p>
+                                        <p className="text-xs font-bold text-stone-400 uppercase tracking-wider">Total</p>
+                                        <p className="text-lg font-bold text-stone-900 font-serif">${calculateStageTotal(stage).toFixed(0)}</p>
                                     </div>
-                                    <button onClick={() => handleDeleteStage(stageIdx)} className="p-2 text-gray-500 hover:bg-gray-200 hover:text-black rounded-md"><TrashIcon className="h-5 w-5"/></button>
+                                    <button onClick={() => handleDeleteStage(stageIdx)} className="p-2 text-stone-400 hover:bg-red-50 hover:text-red-600 rounded-md transition-colors"><TrashIcon className="h-5 w-5"/></button>
                                  </div>
                              </div>
                              
                              {/* Sections List */}
-                             <div className="space-y-4">
+                             <div className="space-y-6">
                                 {stage.sections.map((section, sectionIdx) => (
-                                    <div key={section.id} className="border border-gray-300 rounded-md p-3 bg-gray-50/50">
-                                         <div className="flex justify-between items-center mb-2">
-                                            <h4 className="text-md font-semibold text-gray-700">{section.name}</h4>
-                                            <div className="flex items-center space-x-2">
-                                                <span className="text-sm font-bold text-gray-700">${calculateSectionTotal(section).toFixed(0)}</span>
-                                                <button onClick={() => handleDeleteSectionFromStage(stageIdx, sectionIdx)} className="p-1 text-gray-500 hover:text-red-600 rounded-md"><TrashIcon className="h-4 w-4"/></button>
+                                    <div key={section.id} className="border border-stone-200 rounded-lg p-4 bg-stone-50/30">
+                                         <div className="flex justify-between items-center mb-4">
+                                            <h4 className="text-md font-serif font-bold text-stone-800">{section.name}</h4>
+                                            <div className="flex items-center space-x-3">
+                                                <span className="text-sm font-bold text-stone-700">${calculateSectionTotal(section).toFixed(0)}</span>
+                                                <button onClick={() => handleDeleteSectionFromStage(stageIdx, sectionIdx)} className="p-1.5 text-stone-400 hover:text-red-600 rounded-md hover:bg-red-50 transition-colors"><TrashIcon className="h-4 w-4"/></button>
                                             </div>
                                         </div>
                                         
                                         {/* Categories/Tasks */}
-                                         <div className="space-y-2">
+                                         <div className="space-y-4">
                                              {section.content.map((contentItem, contentIdx) => (
-                                                 <div key={contentItem.categoryId} className="bg-white border border-gray-200 rounded p-2">
-                                                      <div className="flex justify-between items-center mb-1">
-                                                            <span className="text-xs font-bold text-gray-600 uppercase">{contentItem.name}</span>
-                                                            <button onClick={() => handleDeleteCategoryFromSection(stageIdx, sectionIdx, contentIdx)} className="text-gray-400 hover:text-red-500"><TrashIcon className="h-3 w-3"/></button>
+                                                 <div key={contentItem.categoryId} className="bg-white border border-stone-100 rounded-lg p-3 shadow-sm">
+                                                      <div className="flex justify-between items-center mb-2 border-b border-stone-50 pb-1">
+                                                            <span className="text-xs font-bold text-stone-500 uppercase tracking-widest">{contentItem.name}</span>
+                                                            <button onClick={() => handleDeleteCategoryFromSection(stageIdx, sectionIdx, contentIdx)} className="text-stone-300 hover:text-red-500 transition-colors"><TrashIcon className="h-3 w-3"/></button>
                                                       </div>
                                                       {/* Tasks Header */}
                                                        { (contentItem.tasks.length > 0 || contentItem.subcategories.some(s => s.tasks.length > 0)) &&
-                                                            <div className="grid grid-cols-12 gap-2 px-2 py-2 mb-2 text-[10px] font-bold text-gray-500 uppercase bg-gray-50 rounded-t-md border-b border-gray-200">
+                                                            <div className="grid grid-cols-12 gap-2 px-3 py-2 mb-2 text-[10px] font-bold text-stone-400 uppercase bg-stone-50 rounded-md">
                                                                 <div className="col-span-4 md:col-span-3">Task</div>
                                                                 <div className="col-span-2 text-center">Sugg. Hrs</div>
                                                                 <div className="col-span-2 text-center">Your Est.</div>
@@ -546,7 +549,7 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
                                                             </div>
                                                        }
                                                       
-                                                      <div className="space-y-1">
+                                                      <div className="space-y-2">
                                                           {contentItem.tasks.map((task, taskIdx) => (
                                                               <TaskRow 
                                                                 key={task.id} 
@@ -555,14 +558,14 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
                                                                 onDeleteTask={() => handleDeleteTask(stageIdx, sectionIdx, contentIdx, taskIdx, null)}
                                                               />
                                                           ))}
-                                                           <button onClick={() => handleAddTask(stageIdx, sectionIdx, contentIdx, null)} className="text-xs text-blue-600 hover:underline px-2">+ Add Task</button>
+                                                           <button onClick={() => handleAddTask(stageIdx, sectionIdx, contentIdx, null)} className="text-xs font-bold text-stone-500 hover:text-stone-800 uppercase tracking-wide py-1">+ Add Task</button>
                                                       </div>
                                                       
                                                       {/* Subcategories */}
                                                        {contentItem.subcategories.map((sub, subIdx) => (
-                                                         <div key={sub.id} className="mt-2 pl-2 border-l-2 border-gray-100">
-                                                             <span className="text-xs font-semibold text-gray-500">{sub.name}</span>
-                                                             <div className="space-y-1 mt-1">
+                                                         <div key={sub.id} className="mt-4 pl-4 border-l-2 border-stone-100">
+                                                             <span className="text-xs font-bold text-stone-400 mb-2 block">{sub.name}</span>
+                                                             <div className="space-y-2 mt-1">
                                                                  {sub.tasks.map((task, taskIdx) => (
                                                                       <TaskRow 
                                                                         key={task.id} 
@@ -571,18 +574,18 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
                                                                         onDeleteTask={() => handleDeleteTask(stageIdx, sectionIdx, contentIdx, taskIdx, subIdx)}
                                                                       />
                                                                  ))}
-                                                                 <button onClick={() => handleAddTask(stageIdx, sectionIdx, contentIdx, subIdx)} className="text-xs text-blue-600 hover:underline px-2">+ Add Task</button>
+                                                                 <button onClick={() => handleAddTask(stageIdx, sectionIdx, contentIdx, subIdx)} className="text-xs font-bold text-stone-500 hover:text-stone-800 uppercase tracking-wide py-1">+ Add Task</button>
                                                              </div>
                                                          </div>
                                                       ))}
                                                  </div>
                                              ))}
-                                             <div className="mt-2">
+                                             <div className="mt-3 pt-3 border-t border-stone-200/50">
                                                 <select 
                                                     onChange={e => { if (e.target.value) handleAddCategoryToSection(stageIdx, sectionIdx, e.target.value); e.target.value=""; }} 
-                                                    className="text-xs border border-gray-300 rounded p-1 w-full"
+                                                    className="text-xs border border-stone-300 rounded-md p-2 w-full md:w-auto bg-white text-stone-700 focus:ring-stone-500 focus:border-stone-500"
                                                 >
-                                                    <option value="">+ Add Category</option>
+                                                    <option value="">+ Add Category to Section</option>
                                                     {categories.filter(cat => !section.content.some(c => c.categoryId === cat.id)).map(c => (
                                                         <option key={c.id} value={c.id}>{c.name}</option>
                                                     ))}
@@ -593,7 +596,7 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
                                 ))}
                                 <select 
                                     onChange={e => { if (e.target.value) handleAddSectionToStage(stageIdx, e.target.value); e.target.value=""; }} 
-                                    className="w-full text-sm border border-gray-300 rounded-md p-2 bg-white"
+                                    className="w-full text-sm border border-dashed border-stone-300 rounded-lg p-3 bg-stone-50 text-stone-600 hover:bg-white hover:border-stone-400 cursor-pointer transition-colors"
                                 >
                                     <option value="">+ Add Section from Templates</option>
                                     {sections.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -602,80 +605,81 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
                          </div>
                      ))}
 
-                     <button onClick={handleAddStage} className="w-full py-3 border-2 border-dashed border-gray-300 rounded-lg text-gray-500 hover:border-black hover:text-black transition-colors flex justify-center items-center space-x-2">
+                     <button onClick={handleAddStage} className="w-full py-4 border-2 border-dashed border-stone-300 rounded-xl text-stone-500 font-medium hover:border-stone-800 hover:text-stone-800 hover:bg-white transition-all flex justify-center items-center space-x-2">
                          <PlusIcon />
                          <span>Add New Stage</span>
                      </button>
                 </div>
             )}
+            </div>
         </div>
     );
     
     const renderStep4 = () => (
-        <div className="space-y-4">
-            <h3 className="text-xl font-semibold text-gray-700 mb-4">4. Preview & Confirm</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-3 p-4 border rounded-md bg-gray-50/50">
-                    <div className="flex justify-between items-start">
-                        <div><h4 className="font-semibold text-black">Basic Information</h4></div>
-                        <button onClick={() => setStep(1)} className="text-sm font-medium text-black hover:underline">Edit</button>
+        <div className="space-y-6 max-w-4xl mx-auto">
+            <h3 className="text-2xl font-serif font-bold text-stone-900 mb-6 text-center">Preview & Confirm</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3 p-6 border border-stone-200 rounded-xl bg-white shadow-sm">
+                    <div className="flex justify-between items-start border-b border-stone-100 pb-2 mb-2">
+                        <div><h4 className="font-serif font-bold text-stone-800 text-lg">Basic Information</h4></div>
+                        <button onClick={() => setStep(1)} className="text-xs font-bold text-stone-400 hover:text-stone-900 uppercase tracking-wide">Edit</button>
                     </div>
-                    <p className="text-sm text-black"><strong>Project Name:</strong> {projectName}</p>
-                    <p className="text-sm text-black"><strong>Budget:</strong> ${Number(budgetMin).toLocaleString()} - ${Number(budgetMax).toLocaleString()}</p>
-                    <p className="text-sm text-black"><strong>Timeline:</strong> {timelineMin} - {timelineMax} weeks</p>
+                    <p className="text-sm text-stone-700"><strong className="text-stone-900">Project Name:</strong> {projectName}</p>
+                    <p className="text-sm text-stone-700"><strong className="text-stone-900">Budget:</strong> ${Number(budgetMin).toLocaleString()} - ${Number(budgetMax).toLocaleString()}</p>
+                    <p className="text-sm text-stone-700"><strong className="text-stone-900">Timeline:</strong> {timelineMin} - {timelineMax} weeks</p>
                 </div>
-                <div className="space-y-2 p-4 border rounded-md bg-gray-50/50">
-                    <div className="flex justify-between items-start">
-                        <div><h4 className="font-semibold text-black">Details</h4></div>
-                        <button onClick={() => setStep(2)} className="text-sm font-medium text-black hover:underline">Edit</button>
+                <div className="space-y-3 p-6 border border-stone-200 rounded-xl bg-white shadow-sm">
+                    <div className="flex justify-between items-start border-b border-stone-100 pb-2 mb-2">
+                        <div><h4 className="font-serif font-bold text-stone-800 text-lg">Details</h4></div>
+                        <button onClick={() => setStep(2)} className="text-xs font-bold text-stone-400 hover:text-stone-900 uppercase tracking-wide">Edit</button>
                     </div>
-                    <p className="text-sm text-black"><strong>Spaces:</strong> {selectedSpaces.join(', ')}</p>
-                    <p className="text-sm text-black"><strong>Total Area:</strong> {totalArea} sq ft</p>
-                    <p className="text-sm text-black"><strong>Quality:</strong> {qualityLevel}</p>
-                    <p className="text-sm text-black"><strong>Type:</strong> {currentProjectTypeName}</p>
+                    <p className="text-sm text-stone-700"><strong className="text-stone-900">Spaces:</strong> {selectedSpaces.join(', ')}</p>
+                    <p className="text-sm text-stone-700"><strong className="text-stone-900">Total Area:</strong> {totalArea} sq ft</p>
+                    <p className="text-sm text-stone-700"><strong className="text-stone-900">Quality:</strong> {qualityLevel}</p>
+                    <p className="text-sm text-stone-700"><strong className="text-stone-900">Type:</strong> {currentProjectTypeName}</p>
                 </div>
             </div>
             
-             <div className="space-y-4 pt-4 border-t">
+             <div className="space-y-6 pt-6 border-t border-stone-200">
                 <div className="flex justify-between items-center">
-                    <h4 className="text-lg font-semibold text-black">Project Staging & Estimates</h4>
-                    <button onClick={() => setStep(3)} className="text-sm font-medium text-black hover:underline">Edit Stages</button>
+                    <h4 className="text-xl font-serif font-bold text-stone-900">Project Stages Breakdown</h4>
+                    <button onClick={() => setStep(3)} className="text-xs font-bold text-stone-400 hover:text-stone-900 uppercase tracking-wide">Edit Stages</button>
                 </div>
                 
                 {stages.length > 0 ? (
                     <div className="space-y-4">
                          {stages.map((stage, index) => (
-                             <details key={index} open className="bg-white border border-black rounded-lg overflow-hidden">
-                                 <summary className="flex justify-between items-center p-3 bg-gray-100 cursor-pointer">
-                                     <span className="font-bold text-black">{stage.name}</span>
-                                     <span className="font-bold text-black">${calculateStageTotal(stage).toFixed(0)}</span>
+                             <details key={index} open className="bg-white border border-stone-200 rounded-xl overflow-hidden shadow-sm group">
+                                 <summary className="flex justify-between items-center p-4 bg-stone-50 cursor-pointer group-hover:bg-stone-100 transition-colors">
+                                     <span className="font-serif font-bold text-stone-900 text-lg">{stage.name}</span>
+                                     <span className="font-bold text-stone-900 text-lg">${calculateStageTotal(stage).toFixed(0)}</span>
                                  </summary>
                                  <div className="p-4 space-y-4">
                                      {stage.sections.map(section => (
                                          <div key={section.id}>
-                                             <div className="flex justify-between items-center border-b border-gray-200 pb-1 mb-2">
-                                                 <span className="font-semibold text-gray-700">{section.name}</span>
-                                                 <span className="font-medium text-gray-700">${calculateSectionTotal(section).toFixed(0)}</span>
+                                             <div className="flex justify-between items-center border-b border-stone-100 pb-2 mb-2">
+                                                 <span className="font-bold text-stone-700">{section.name}</span>
+                                                 <span className="font-medium text-stone-600">${calculateSectionTotal(section).toFixed(0)}</span>
                                              </div>
-                                             <div className="pl-2 space-y-2">
+                                             <div className="pl-2 space-y-3">
                                                  {section.content.map(content => (
                                                      <div key={content.categoryId}>
-                                                         <h5 className="text-xs font-bold text-gray-500 uppercase mb-1">{content.name}</h5>
+                                                         <h5 className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">{content.name}</h5>
                                                          <table className="w-full text-left">
-                                                             <thead className="text-[10px] text-gray-400 uppercase">
+                                                             <thead className="text-[10px] text-stone-400 uppercase bg-stone-50/50">
                                                                 <tr>
-                                                                    <th className="font-normal px-2">Task</th>
-                                                                    <th className="font-normal px-2 text-center">Sugg. Hrs</th>
-                                                                    <th className="font-normal px-2 text-center">Est. Hrs</th>
-                                                                    <th className="font-normal px-2 text-center">Cost</th>
-                                                                    <th className="font-normal px-2 text-center">Total</th>
+                                                                    <th className="font-normal px-2 py-1">Task</th>
+                                                                    <th className="font-normal px-2 py-1 text-center">Sugg. Hrs</th>
+                                                                    <th className="font-normal px-2 py-1 text-center">Est. Hrs</th>
+                                                                    <th className="font-normal px-2 py-1 text-center">Cost</th>
+                                                                    <th className="font-normal px-2 py-1 text-center">Total</th>
                                                                 </tr>
                                                              </thead>
                                                              <tbody>
                                                                 {content.tasks.map(task => <PreviewTaskRow key={task.id} task={task}/>)}
                                                                 {content.subcategories.map(sub => (
                                                                     <React.Fragment key={sub.id}>
-                                                                        <tr><td colSpan={5} className="py-1 px-2 text-xs font-semibold text-gray-500 italic">{sub.name}</td></tr>
+                                                                        <tr><td colSpan={5} className="py-2 px-2 text-xs font-bold text-stone-500 pl-4">{sub.name}</td></tr>
                                                                         {sub.tasks.map(task => <PreviewTaskRow key={task.id} task={task}/>)}
                                                                     </React.Fragment>
                                                                 ))}
@@ -686,46 +690,48 @@ const ProjectCreationWizard: React.FC<ProjectCreationWizardProps> = ({ onCancel,
                                              </div>
                                          </div>
                                      ))}
-                                     {stage.sections.length === 0 && <p className="text-sm text-gray-500 italic">No sections in this stage.</p>}
+                                     {stage.sections.length === 0 && <p className="text-sm text-stone-400 italic text-center py-2">No sections in this stage.</p>}
                                  </div>
                              </details>
                          ))}
-                         <div className="flex justify-end pt-2">
-                             <div className="text-right">
-                                 <p className="text-sm text-gray-500">Total Estimated Project Value</p>
-                                 <p className="text-2xl font-bold text-black">
+                         <div className="flex justify-end pt-4">
+                             <div className="text-right bg-stone-900 text-white p-6 rounded-xl shadow-lg">
+                                 <p className="text-sm font-bold text-stone-400 uppercase tracking-wide mb-1">Total Estimated Value</p>
+                                 <p className="text-3xl font-serif font-bold">
                                      ${stages.reduce((acc, stage) => acc + calculateStageTotal(stage), 0).toFixed(2)}
                                  </p>
                              </div>
                          </div>
                     </div>
                 ) : (
-                    <p className="text-sm text-gray-500 p-4 border border-dashed rounded-lg text-center">No stages defined for this project.</p>
+                    <p className="text-sm text-stone-500 p-8 border-2 border-dashed border-stone-200 rounded-xl text-center italic">No stages defined for this project.</p>
                 )}
             </div>
         </div>
     );
     
     return (
-        <div className="space-y-6">
-            <header className="mb-8">
-                <h1 className="text-3xl font-bold text-black">Create a New Project</h1>
-                <p className="text-gray-600 mt-1">Follow the steps to define your new project.</p>
+        <div className="space-y-8 h-full flex flex-col">
+            <header className="flex-shrink-0">
+                <h1 className="text-3xl font-serif font-bold text-stone-900">Create a New Project</h1>
+                <p className="text-stone-500 mt-1 font-light">Follow the steps to define your new masterpiece.</p>
             </header>
-            <div className="bg-white rounded-lg shadow-md border border-black w-full flex flex-col h-[80vh]">
-                <div className="p-6 overflow-y-auto flex-1">
+            <div className="bg-white rounded-2xl shadow-xl border border-stone-200 w-full flex flex-col flex-1 overflow-hidden">
+                <div className="p-8 overflow-y-auto flex-1">
                     <Stepper currentStep={step} />
-                    {step === 1 && renderStep1()}
-                    {step === 2 && renderStep2()}
-                    {step === 3 && renderStep3()}
-                    {step === 4 && renderStep4()}
+                    <div className="animate-fadeIn">
+                        {step === 1 && renderStep1()}
+                        {step === 2 && renderStep2()}
+                        {step === 3 && renderStep3()}
+                        {step === 4 && renderStep4()}
+                    </div>
                 </div>
-                <div className="flex justify-between items-center p-4 border-t bg-gray-50 rounded-b-lg flex-shrink-0">
-                    <button onClick={onCancel} className="px-4 py-2 text-black bg-white border border-black rounded-md hover:bg-gray-100">Cancel</button>
-                    <div className="flex items-center space-x-2">
-                        {step > 1 && <button onClick={prevStep} className="px-4 py-2 text-black bg-white border border-black rounded-md hover:bg-gray-100">Back</button>}
-                        {step < 4 && <button onClick={nextStep} disabled={ (step === 1 && !isStep1Valid) || (step === 2 && !isStep2Valid) || (step === 3 && !isStep3Valid) } className="px-6 py-2 text-white bg-black rounded-md hover:bg-gray-800 disabled:bg-gray-400">Next</button>}
-                        {step === 4 && <button onClick={handleSubmit} className="px-6 py-2 text-white bg-black rounded-md hover:bg-gray-800">Create Project</button>}
+                <div className="flex justify-between items-center p-6 border-t border-stone-100 bg-stone-50 flex-shrink-0">
+                    <button onClick={onCancel} className="px-6 py-2.5 text-stone-600 bg-white border border-stone-300 rounded-lg hover:bg-stone-100 hover:text-stone-900 font-medium transition-colors">Cancel</button>
+                    <div className="flex items-center space-x-3">
+                        {step > 1 && <button onClick={prevStep} className="px-6 py-2.5 text-stone-800 bg-white border border-stone-300 rounded-lg hover:bg-stone-100 font-medium transition-colors">Back</button>}
+                        {step < 4 && <button onClick={nextStep} disabled={ (step === 1 && !isStep1Valid) || (step === 2 && !isStep2Valid) || (step === 3 && !isStep3Valid) } className="px-8 py-2.5 text-white bg-stone-900 rounded-lg hover:bg-stone-800 disabled:bg-stone-300 disabled:cursor-not-allowed font-medium shadow-md transition-all">Next</button>}
+                        {step === 4 && <button onClick={handleSubmit} className="px-8 py-2.5 text-white bg-stone-900 rounded-lg hover:bg-stone-800 font-medium shadow-lg transition-all transform hover:-translate-y-0.5">Create Project</button>}
                     </div>
                 </div>
             </div>
