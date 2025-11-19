@@ -56,23 +56,23 @@ const ProjectTypesPage: React.FC<ProjectTypesPageProps> = ({ projectTypes, setPr
                     placeholder="Search project types..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900"
+                    className="w-full max-w-sm px-4 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
                 />
-                <button onClick={() => setModal({ type: 'ADD_ITEM' })} className="flex items-center space-x-2 bg-[#5F716B] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#4E5C57] transition-colors">
+                <button onClick={() => setModal({ type: 'ADD_ITEM' })} className="flex items-center space-x-2 bg-black text-white font-semibold px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
                     <PlusIcon />
                     <span>Add Project Type</span>
                 </button>
             </div>
-            <div className="bg-white rounded-lg shadow-md border border-gray-200">
-                <ul className="divide-y divide-gray-200">
+            <div className="bg-white rounded-lg shadow-md border border-black">
+                <ul className="divide-y divide-black">
                     {filteredProjectTypes.length > 0 ? filteredProjectTypes.map(pt => (
                         <li key={pt.id} className="p-4 flex justify-between items-center">
-                            <span className="text-gray-800 font-medium">{pt.name}</span>
+                            <span className="text-black font-medium">{pt.name}</span>
                             <div className="flex items-center space-x-2">
                                 <button onClick={() => setModal({ type: 'EDIT_ITEM', payload: pt })} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="Edit">
                                     <PencilIcon className="h-5 w-5"/>
                                 </button>
-                                <button onClick={() => handleDeleteRequest(pt)} className="p-2 text-gray-500 hover:bg-red-100 hover:text-red-600 rounded-md" title="Delete">
+                                <button onClick={() => handleDeleteRequest(pt)} className="p-2 text-gray-500 hover:bg-gray-200 hover:text-black rounded-md" title="Delete">
                                     <TrashIcon className="h-5 w-5"/>
                                 </button>
                             </div>

@@ -75,6 +75,15 @@ export interface Project {
   projectType: string;
   projectDescription: string;
   stages: ProjectStage[];
+  
+  // New fields from wizard
+  budgetMin?: number;
+  budgetMax?: number;
+  timelineMin?: number;
+  timelineMax?: number;
+  spaces?: string[];
+  totalArea?: number;
+  qualityLevel?: 'Standard' | 'Premium' | 'Luxury';
 }
 
 // Admin Management

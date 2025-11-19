@@ -11,10 +11,10 @@ const ProfileDetail = ({ label, value }: { label: string; value?: string | numbe
     if (Array.isArray(value)) {
          return (
              <div className="md:col-span-2">
-                <p className="text-sm font-medium text-gray-500">{label}</p>
+                <p className="text-sm font-medium text-gray-600">{label}</p>
                 <div className="flex flex-wrap gap-2 mt-2">
                   {value.map(spec => (
-                     <span key={spec} className="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-1 rounded-full">{spec}</span>
+                     <span key={spec} className="bg-gray-100 text-black text-xs font-medium px-2.5 py-1 rounded-full">{spec}</span>
                   ))}
                 </div>
               </div>
@@ -23,8 +23,8 @@ const ProfileDetail = ({ label, value }: { label: string; value?: string | numbe
     
     return (
         <div>
-            <p className="text-sm font-medium text-gray-500">{label}</p>
-            <p className="mt-1 text-gray-800">{value}</p>
+            <p className="text-sm font-medium text-gray-600">{label}</p>
+            <p className="mt-1 text-black">{value}</p>
         </div>
     );
 };
@@ -33,14 +33,14 @@ const CustomerProfilePage: React.FC<CustomerProfilePageProps> = ({ customer }) =
   return (
     <div>
         <header className="mb-8">
-             <h1 className="text-3xl font-bold text-gray-800">
+             <h1 className="text-3xl font-bold text-black">
               Profile
             </h1>
-            <p className="text-gray-500 mt-1">
+            <p className="text-gray-600 mt-1">
               View and manage your personal information.
             </p>
         </header>
-        <div className="bg-white rounded-lg shadow-md border border-gray-200 p-8 space-y-6">
+        <div className="bg-white rounded-lg shadow-md border border-black p-8 space-y-6">
           {customer ? (
             <div>
               <h3 className="text-xl font-semibold text-gray-700 mb-4">Your Details</h3>
@@ -56,8 +56,8 @@ const CustomerProfilePage: React.FC<CustomerProfilePageProps> = ({ customer }) =
 
                 {customer.bio && (
                   <div className="md:col-span-2">
-                    <p className="text-sm font-medium text-gray-500">Profile Bio</p>
-                    <p className="text-gray-800 mt-1 whitespace-pre-wrap text-sm leading-6">{customer.bio}</p>
+                    <p className="text-sm font-medium text-gray-600">Profile Bio</p>
+                    <p className="text-black mt-1 whitespace-pre-wrap text-sm leading-6">{customer.bio}</p>
                   </div>
                 )}
               </div>

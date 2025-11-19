@@ -173,35 +173,35 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 z-40 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/50 z-40 flex items-center justify-center p-4">
             {isCategoryModalOpen && <CategoryModal onClose={() => setCategoryModalOpen(false)} onSave={handleSaveNewCategory} />}
-            <div className="bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
-                <div className="flex justify-between items-center p-4 border-b">
-                    <h2 className="text-xl font-bold text-gray-800">Create New Section</h2>
+            <div className="bg-white rounded-lg shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-black">
+                <div className="flex justify-between items-center p-4 border-b border-black">
+                    <h2 className="text-xl font-bold text-black">Create New Section</h2>
                     <button onClick={onClose} className="p-1 hover:bg-gray-200 rounded-full"><XMarkIcon /></button>
                 </div>
                 <div className="p-6 space-y-4 overflow-y-auto">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Section Name *</label>
-                            <input type="text" value={name} onChange={e => setName(e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900" />
+                            <input type="text" value={name} onChange={e => setName(e.target.value)} className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black" />
                         </div>
                          <div ref={dropdownRef} className="relative">
                             <label className="block text-sm font-medium text-gray-700 mb-1">Select Categories</label>
-                            <button onClick={() => setCategoryDropdownOpen(p => !p)} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-left flex justify-between items-center text-black">
+                            <button onClick={() => setCategoryDropdownOpen(p => !p)} className="w-full px-3 py-2 border border-black rounded-md shadow-sm bg-white text-left flex justify-between items-center text-black">
                                 <span>{selectedCategoryIds.length > 0 ? `${selectedCategoryIds.length} categor${selectedCategoryIds.length > 1 ? 'ies' : 'y'} selected` : 'Select...'}</span>
                                 <ChevronDownIcon />
                             </button>
                             {isCategoryDropdownOpen && (
-                                <div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-lg mt-1 z-10 max-h-60 overflow-y-auto">
+                                <div className="absolute top-full left-0 w-full bg-white border border-black rounded-md shadow-lg mt-1 z-10 max-h-60 overflow-y-auto">
                                     {categories.map(cat => (
                                         <label key={cat.id} className="flex items-center space-x-2 p-2 hover:bg-gray-100 cursor-pointer">
-                                            <input type="checkbox" checked={selectedCategoryIds.includes(cat.id)} onChange={() => handleToggleCategory(cat.id)} className="bg-white border-gray-300 rounded text-[#5F716B] focus:ring-[#8E9B9A]"/>
+                                            <input type="checkbox" checked={selectedCategoryIds.includes(cat.id)} onChange={() => handleToggleCategory(cat.id)} className="bg-white border-black rounded text-black focus:ring-black"/>
                                             <span className="text-black">{cat.name}</span>
                                         </label>
                                     ))}
                                     <div className="p-2 border-t">
-                                        <button onClick={() => setCategoryModalOpen(true)} className="text-sm w-full text-center font-medium text-[#5F716B] hover:text-[#4E5C57]">Add New Category...</button>
+                                        <button onClick={() => setCategoryModalOpen(true)} className="text-sm w-full text-center font-medium text-black hover:text-gray-700">Add New Category...</button>
                                     </div>
                                 </div>
                             )}
@@ -209,11 +209,11 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                        <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900" />
+                        <textarea value={description} onChange={e => setDescription(e.target.value)} rows={2} className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black" />
                     </div>
 
                     <div className="pt-4 border-t space-y-4">
-                        <h3 className="text-lg font-bold text-gray-800">Section Content</h3>
+                        <h3 className="text-lg font-bold text-black">Section Content</h3>
                         {content.length === 0 && <p className="text-gray-500 text-center py-4">Select categories to populate content.</p>}
                         {content.map((catContent) => (
                             <div key={catContent.categoryId} className="p-4 bg-gray-50 rounded-md border space-y-3">
@@ -227,7 +227,7 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                                     type="text"
                                                     value={task.name}
                                                     onChange={e => handleContentTaskChange(catContent.categoryId, index, 'name', e.target.value)}
-                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900"
+                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-black"
                                                     placeholder="Enter task name"
                                                 />
                                             </div>
@@ -238,7 +238,7 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                                         type="number"
                                                         value={task.estimateHours}
                                                         onChange={e => handleContentTaskChange(catContent.categoryId, index, 'estimateHours', Number(e.target.value))}
-                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900"
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-black"
                                                         placeholder="e.g., 2"
                                                     />
                                                 </div>
@@ -248,11 +248,11 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                                         type="number"
                                                         value={task.estimateCost}
                                                         onChange={e => handleContentTaskChange(catContent.categoryId, index, 'estimateCost', Number(e.target.value))}
-                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900"
+                                                        className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-black"
                                                         placeholder="e.g., 150"
                                                     />
                                                 </div>
-                                                <button onClick={() => handleRemoveTask(catContent.categoryId, task.id)} className="p-2 text-red-500 hover:bg-red-100 rounded-md">
+                                                <button onClick={() => handleRemoveTask(catContent.categoryId, task.id)} className="p-2 text-black hover:bg-gray-200 rounded-md">
                                                     <TrashIcon className="h-5 w-5"/>
                                                 </button>
                                             </div>
@@ -260,14 +260,14 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                     </div>
                                 ))}
                                 <div className="pl-4">
-                                    <button onClick={() => handleAddTask(catContent.categoryId)} className="text-sm font-medium text-[#5F716B] hover:text-[#4E5C57]">Add Task to {catContent.name}</button>
+                                    <button onClick={() => handleAddTask(catContent.categoryId)} className="text-sm font-medium text-black hover:text-gray-700">Add Task to {catContent.name}</button>
                                 </div>
 
                                 {catContent.subcategories.map((sub, subIndex) => (
                                     <div key={sub.id} className="p-4 bg-white rounded-md border ml-4 space-y-2">
                                         <div className="flex items-center space-x-2">
-                                            <input type="text" value={sub.name} readOnly className="flex-grow px-3 py-2 border border-gray-300 bg-white text-gray-900 rounded-md font-semibold cursor-not-allowed" />
-                                            <button onClick={() => handleRemoveSubcategory(catContent.categoryId, sub.id)} className="p-2 text-red-500 hover:bg-red-100 rounded-md"><TrashIcon className="h-5 w-5" /></button>
+                                            <input type="text" value={sub.name} readOnly className="flex-grow px-3 py-2 border border-gray-300 bg-gray-100 text-black rounded-md font-semibold cursor-not-allowed" />
+                                            <button onClick={() => handleRemoveSubcategory(catContent.categoryId, sub.id)} className="p-2 text-black hover:bg-gray-200 rounded-md"><TrashIcon className="h-5 w-5" /></button>
                                         </div>
                                         <div className="pl-4 space-y-2">
                                             {sub.tasks.map((task, taskIndex) => (
@@ -279,7 +279,7 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                                                 type="text"
                                                                 value={task.name}
                                                                 onChange={e => handleContentSubtaskChange(catContent.categoryId, subIndex, taskIndex, 'name', e.target.value)}
-                                                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900"
+                                                                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-black"
                                                                 placeholder="Enter task name"
                                                             />
                                                         </div>
@@ -290,7 +290,7 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                                                     type="number"
                                                                     value={task.estimateHours}
                                                                     onChange={e => handleContentSubtaskChange(catContent.categoryId, subIndex, taskIndex, 'estimateHours', Number(e.target.value))}
-                                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900"
+                                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-black"
                                                                     placeholder="e.g., 2"
                                                                 />
                                                             </div>
@@ -300,11 +300,11 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                                                     type="number"
                                                                     value={task.estimateCost}
                                                                     onChange={e => handleContentSubtaskChange(catContent.categoryId, subIndex, taskIndex, 'estimateCost', Number(e.target.value))}
-                                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900"
+                                                                    className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-black"
                                                                     placeholder="e.g., 150"
                                                                 />
                                                             </div>
-                                                            <button onClick={() => handleRemoveSubtask(catContent.categoryId, sub.id, task.id)} className="p-2 text-red-500 hover:bg-red-100 rounded-md">
+                                                            <button onClick={() => handleRemoveSubtask(catContent.categoryId, sub.id, task.id)} className="p-2 text-black hover:bg-gray-200 rounded-md">
                                                                 <TrashIcon className="h-4 w-4"/>
                                                             </button>
                                                         </div>
@@ -312,7 +312,7 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                                                 </div>
                                             ))}
                                             <div className="pl-4">
-                                                <button onClick={() => handleAddTask(catContent.categoryId, sub.id)} className="text-xs font-medium text-[#5F716B] hover:text-[#4E5C57]">Add Task</button>
+                                                <button onClick={() => handleAddTask(catContent.categoryId, sub.id)} className="text-xs font-medium text-black hover:text-gray-700">Add Task</button>
                                             </div>
                                         </div>
                                     </div>
@@ -322,8 +322,8 @@ const AddSectionModal: React.FC<AddSectionModalProps> = ({ onClose, onSave, cate
                     </div>
                 </div>
                 <div className="flex justify-end items-center p-4 border-t bg-gray-50">
-                    <button onClick={onClose} className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md mr-2 hover:bg-gray-50">Cancel</button>
-                    <button onClick={handleSubmit} className="px-4 py-2 text-white bg-[#5F716B] rounded-md hover:bg-[#4E5C57]">Save Section</button>
+                    <button onClick={onClose} className="px-4 py-2 text-black bg-white border border-black rounded-md mr-2 hover:bg-gray-100">Cancel</button>
+                    <button onClick={handleSubmit} className="px-4 py-2 text-white bg-black rounded-md hover:bg-gray-800">Save Section</button>
                 </div>
             </div>
         </div>

@@ -60,26 +60,26 @@ const CategoryManagementPage: React.FC<CategoryManagementPageProps> = ({ categor
                     placeholder="Search categories..."
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900"
+                    className="w-full max-w-sm px-4 py-2 border border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
                 />
-                <button onClick={() => setModal({ type: 'ADD_CATEGORY' })} className="flex items-center space-x-2 bg-[#5F716B] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#4E5C57] transition-colors">
+                <button onClick={() => setModal({ type: 'ADD_CATEGORY' })} className="flex items-center space-x-2 bg-black text-white font-semibold px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
                     <PlusIcon />
                     <span>Add Category</span>
                 </button>
             </div>
-            <div className="bg-white rounded-lg shadow-md border border-gray-200">
-                 <ul className="divide-y divide-gray-200">
+            <div className="bg-white rounded-lg shadow-md border border-black">
+                 <ul className="divide-y divide-black">
                     {filteredCategories.length > 0 ? filteredCategories.map(category => (
                         <li key={category.id} className="p-4 group">
                             <div className="flex justify-between items-center">
                                 <div className="flex-1 cursor-pointer" onClick={() => handleToggleExpand(category.id)}>
-                                    <p className="font-semibold text-gray-800 group-hover:text-[#5F716B]">{category.name}</p>
-                                    <p className="text-sm text-gray-500 truncate">{category.description}</p>
+                                    <p className="font-semibold text-black group-hover:text-gray-700">{category.name}</p>
+                                    <p className="text-sm text-gray-600 truncate">{category.description}</p>
                                 </div>
                                 <div className="flex items-center space-x-2">
                                     <button onClick={() => handleToggleExpand(category.id)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="View"><EyeIcon className="h-5 w-5"/></button>
                                     <button onClick={() => setModal({ type: 'EDIT_CATEGORY', payload: category })} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="Edit"><PencilIcon className="h-5 w-5"/></button>
-                                    <button onClick={() => handleDeleteRequest(category)} className="p-2 text-gray-500 hover:bg-red-100 hover:text-red-600 rounded-md" title="Delete"><TrashIcon className="h-5 w-5"/></button>
+                                    <button onClick={() => handleDeleteRequest(category)} className="p-2 text-gray-500 hover:bg-gray-200 hover:text-black rounded-md" title="Delete"><TrashIcon className="h-5 w-5"/></button>
                                 </div>
                             </div>
                             {expandedCategoryId === category.id && <CategoryView category={category} />}

@@ -16,7 +16,7 @@ const specializationGroups: Record<string, string[]> = {
 };
 
 const FormButton: React.FC<{ children: React.ReactNode, onClick?: () => void }> = ({ children, onClick }) => (
-    <button type="submit" onClick={onClick} className="w-full bg-[#5F716B] text-white font-semibold py-3 rounded-lg hover:bg-[#4E5C57] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5F716B] transition-all duration-300 ease-in-out">
+    <button type="submit" onClick={onClick} className="w-full bg-black text-white font-semibold py-3 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out">
         {children}
     </button>
 );
@@ -51,26 +51,26 @@ const LoginView = ({ onSwitchToSignUp, onSwitchToForgot, onLoginSuccess }: { onS
     return (
         <div className="p-8 md:p-12 space-y-6">
             <div className="text-center">
-                <h1 className="text-3xl font-bold text-gray-800">Customer Portal</h1>
-                <p className="text-gray-500 mt-2">Access your project details</p>
+                <h1 className="text-3xl font-bold text-black">Customer Portal</h1>
+                <p className="text-gray-600 mt-2">Access your project details</p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><MailIcon className="h-5 w-5 text-gray-400" /></span>
-                    <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><MailIcon className="h-5 w-5 text-black" /></span>
+                    <input type="email" placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black" required />
                 </div>
                 <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><LockIcon className="h-5 w-5 text-gray-400" /></span>
-                    <input type={showPassword ? 'text' : 'password'} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full pl-10 pr-10 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><LockIcon className="h-5 w-5 text-black" /></span>
+                    <input type={showPassword ? 'text' : 'password'} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full pl-10 pr-10 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black" required />
                     <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute inset-y-0 right-0 flex items-center pr-3">
-                        {showPassword ? <EyeSlashIcon className="h-5 w-5 text-gray-400" /> : <EyeIcon className="h-5 w-5 text-gray-400" />}
+                        {showPassword ? <EyeSlashIcon className="h-5 w-5 text-black" /> : <EyeIcon className="h-5 w-5 text-black" />}
                     </button>
                 </div>
                 {error && <p className="text-red-500 text-sm text-center">{error}</p>}
                 <div><FormButton>Login</FormButton></div>
                 <div className="text-sm text-center flex justify-between">
-                    <button type="button" onClick={onSwitchToForgot} className="font-medium text-[#5F716B] hover:text-[#4E5C57]">Forgot Password?</button>
-                    <button type="button" onClick={onSwitchToSignUp} className="font-medium text-[#5F716B] hover:text-[#4E5C57]">Sign Up</button>
+                    <button type="button" onClick={onSwitchToForgot} className="font-medium text-black hover:text-gray-700">Forgot Password?</button>
+                    <button type="button" onClick={onSwitchToSignUp} className="font-medium text-black hover:text-gray-700">Sign Up</button>
                 </div>
             </form>
         </div>
@@ -99,29 +99,29 @@ const SignUpView = ({ onSwitchToLogin, onSignUpSuccess }: { onSwitchToLogin: () 
     return (
         <div className="p-8 md:p-12 space-y-6">
             <div className="text-center">
-                <h1 className="text-3xl font-bold text-gray-800">Create Account</h1>
-                <p className="text-gray-500 mt-2">Join our client community</p>
+                <h1 className="text-3xl font-bold text-black">Create Account</h1>
+                <p className="text-gray-600 mt-2">Join our client community</p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><UserIcon className="h-5 w-5 text-gray-400" /></span>
-                    <input type="text" placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><UserIcon className="h-5 w-5 text-black" /></span>
+                    <input type="text" placeholder="Full Name" value={name} onChange={e => setName(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black" required />
                 </div>
                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><MailIcon className="h-5 w-5 text-gray-400" /></span>
-                    <input type="email" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><MailIcon className="h-5 w-5 text-black" /></span>
+                    <input type="email" placeholder="Email Address" value={email} onChange={e => setEmail(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black" required />
                 </div>
                 <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><LockIcon className="h-5 w-5 text-gray-400" /></span>
-                    <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><LockIcon className="h-5 w-5 text-black" /></span>
+                    <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black" required />
                 </div>
                  <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><LockIcon className="h-5 w-5 text-gray-400" /></span>
-                    <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><LockIcon className="h-5 w-5 text-black" /></span>
+                    <input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black" required />
                 </div>
                 <div className="pt-2"><FormButton>Sign Up</FormButton></div>
                 <div className="text-sm text-center">
-                    <button type="button" onClick={onSwitchToLogin} className="font-medium text-[#5F716B] hover:text-[#4E5C57]">Already have an account? Login</button>
+                    <button type="button" onClick={onSwitchToLogin} className="font-medium text-black hover:text-gray-700">Already have an account? Login</button>
                 </div>
             </form>
         </div>
@@ -138,17 +138,17 @@ const ForgotPasswordView = ({ onSwitchToLogin }: { onSwitchToLogin: () => void }
     return (
         <div className="p-8 md:p-12 space-y-6">
             <div className="text-center">
-                <h1 className="text-3xl font-bold text-gray-800">Reset Password</h1>
-                <p className="text-gray-500 mt-2">We'll send you a recovery link</p>
+                <h1 className="text-3xl font-bold text-black">Reset Password</h1>
+                <p className="text-gray-600 mt-2">We'll send you a recovery link</p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="relative">
-                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><MailIcon className="h-5 w-5 text-gray-400" /></span>
-                    <input type="email" placeholder="Your Email Address" className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+                    <span className="absolute inset-y-0 left-0 flex items-center pl-3"><MailIcon className="h-5 w-5 text-black" /></span>
+                    <input type="email" placeholder="Your Email Address" className="w-full pl-10 pr-4 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black" required />
                 </div>
                 <div><FormButton>Send Reset Link</FormButton></div>
                 <div className="text-sm text-center">
-                    <button type="button" onClick={onSwitchToLogin} className="font-medium text-[#5F716B] hover:text-[#4E5C57]">Back to Login</button>
+                    <button type="button" onClick={onSwitchToLogin} className="font-medium text-black hover:text-gray-700">Back to Login</button>
                 </div>
             </form>
         </div>
@@ -165,49 +165,49 @@ const CompleteProfileView = ({ initialData, onComplete }: { initialData: SignUpD
     return (
         <div className="p-8 md:p-12 space-y-6">
             <div className="text-center">
-                <h1 className="text-3xl font-bold text-gray-800">Complete Your Profile</h1>
-                <p className="text-gray-500 mt-2">Tell us a bit more about yourself.</p>
+                <h1 className="text-3xl font-bold text-black">Complete Your Profile</h1>
+                <p className="text-gray-600 mt-2">Tell us a bit more about yourself.</p>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4 text-left">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input type="text" value={initialData.name} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-500 cursor-not-allowed" />
+                    <input type="text" value={initialData.name} readOnly className="w-full px-3 py-2 border border-black rounded-md bg-gray-100 text-gray-700 cursor-not-allowed" />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                    <input type="email" value={initialData.email} readOnly className="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-500 cursor-not-allowed" />
+                    <input type="email" value={initialData.email} readOnly className="w-full px-3 py-2 border border-black rounded-md bg-gray-100 text-gray-700 cursor-not-allowed" />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                    <input type="tel" placeholder="+1 (555) 123-4567" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" required />
+                    <input type="tel" placeholder="+1 (555) 123-4567" className="w-full px-3 py-2 border border-black rounded-md text-black focus:outline-none focus:ring-2 focus:ring-black bg-white" required />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Business/Brand Name</label>
-                    <input type="text" placeholder="e.g., 'Creative Spaces Inc.'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" />
+                    <input type="text" placeholder="e.g., 'Creative Spaces Inc.'" className="w-full px-3 py-2 border border-black rounded-md text-black focus:outline-none focus:ring-2 focus:ring-black bg-white" />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Location (City, Country)</label>
-                    <input type="text" placeholder="e.g., 'New York, USA'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" required />
+                    <input type="text" placeholder="e.g., 'New York, USA'" className="w-full px-3 py-2 border border-black rounded-md text-black focus:outline-none focus:ring-2 focus:ring-black bg-white" required />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Languages Spoken</label>
-                    <input type="text" placeholder="e.g., 'English, Spanish'" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" required />
+                    <input type="text" placeholder="e.g., 'English, Spanish'" className="w-full px-3 py-2 border border-black rounded-md text-black focus:outline-none focus:ring-2 focus:ring-black bg-white" required />
                 </div>
                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Years of professional experience</label>
-                    <input type="number" min="0" placeholder="e.g., 5" className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" required />
+                    <input type="number" min="0" placeholder="e.g., 5" className="w-full px-3 py-2 border border-black rounded-md text-black focus:outline-none focus:ring-2 focus:ring-black bg-white" required />
                 </div>
                 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Design Specializations</label>
-                    <div className="space-y-3 p-3 border border-gray-200 rounded-md max-h-48 overflow-y-auto">
+                    <div className="space-y-3 p-3 border border-black rounded-md max-h-48 overflow-y-auto">
                         {Object.entries(specializationGroups).map(([groupName, options]) => (
                             <div key={groupName}>
                                 <h4 className="font-semibold text-gray-600 text-xs uppercase tracking-wider">{groupName}</h4>
                                 <div className="mt-2 space-y-1">
                                     {options.map(option => (
-                                        <label key={option} className="flex items-center space-x-2 font-normal text-gray-800">
-                                            <input type="checkbox" className="rounded text-[#5F716B] focus:ring-[#8E9B9A] border-gray-300" />
+                                        <label key={option} className="flex items-center space-x-2 font-normal text-black">
+                                            <input type="checkbox" className="bg-white rounded text-black focus:ring-black border-black" />
                                             <span>{option}</span>
                                         </label>
                                     ))}
@@ -219,7 +219,7 @@ const CompleteProfileView = ({ initialData, onComplete }: { initialData: SignUpD
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Profile Bio (50-200 words)</label>
-                    <textarea rows={4} placeholder="Describe your design philosophy and unique selling points..." className="w-full px-3 py-2 border border-gray-200 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white" required />
+                    <textarea rows={4} placeholder="Describe your design philosophy and unique selling points..." className="w-full px-3 py-2 border border-black rounded-md text-black focus:outline-none focus:ring-2 focus:ring-black bg-white" required />
                 </div>
                 <div className="pt-2">
                     <FormButton>Complete Profile & Enter Portal</FormButton>
@@ -259,8 +259,8 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onClose, onProfileCompl
     };
     
     return (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-            <div className={`bg-white rounded-2xl shadow-2xl w-full ${view === 'completeProfile' ? 'max-w-2xl' : 'max-w-md'} relative border border-gray-200 max-h-[90vh] flex flex-col`}>
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className={`bg-white rounded-2xl shadow-2xl w-full ${view === 'completeProfile' ? 'max-w-2xl' : 'max-w-md'} relative border border-black max-h-[90vh] flex flex-col`}>
                 <button onClick={onClose} className="absolute top-4 right-4 p-1 text-gray-500 hover:bg-gray-200 rounded-full z-10">
                     <XMarkIcon className="h-6 w-6" />
                 </button>

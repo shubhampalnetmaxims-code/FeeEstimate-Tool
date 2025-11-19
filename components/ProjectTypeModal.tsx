@@ -21,10 +21,10 @@ const ProjectTypeModal: React.FC<ProjectTypeModalProps> = ({ onClose, onSave, in
     };
 
     return (
-        <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-lg shadow-2xl w-full max-w-md flex flex-col">
-                <div className="flex justify-between items-center p-4 border-b">
-                    <h2 className="text-xl font-bold text-gray-800">{isEditing ? 'Edit Project Type' : 'Create New Project Type'}</h2>
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-lg shadow-2xl w-full max-w-md flex flex-col border border-black">
+                <div className="flex justify-between items-center p-4 border-b border-black">
+                    <h2 className="text-xl font-bold text-black">{isEditing ? 'Edit Project Type' : 'Create New Project Type'}</h2>
                     <button onClick={onClose} className="p-1 hover:bg-gray-200 rounded-full"><XMarkIcon /></button>
                 </div>
                 <div className="p-6 space-y-4">
@@ -35,14 +35,14 @@ const ProjectTypeModal: React.FC<ProjectTypeModalProps> = ({ onClose, onSave, in
                             type="text"
                             value={name}
                             onChange={e => setName(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900"
+                            className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
                             autoFocus
                         />
                     </div>
                 </div>
                 <div className="flex justify-end items-center p-4 border-t bg-gray-50 rounded-b-lg">
-                    <button onClick={onClose} className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md mr-2 hover:bg-gray-50">Cancel</button>
-                    <button onClick={handleSubmit} className="px-4 py-2 text-white bg-[#5F716B] rounded-md hover:bg-[#4E5C57]">Save</button>
+                    <button onClick={onClose} className="px-4 py-2 text-black bg-white border border-black rounded-md mr-2 hover:bg-gray-100">Cancel</button>
+                    <button onClick={handleSubmit} className="px-4 py-2 text-white bg-black rounded-md hover:bg-gray-800">Save</button>
                 </div>
             </div>
         </div>

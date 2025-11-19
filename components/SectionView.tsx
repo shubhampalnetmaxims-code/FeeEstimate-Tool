@@ -7,10 +7,10 @@ const calculateTaskCost = (task: SectionTask) => {
 
 const TaskRowView = ({ task }: { task: SectionTask }) => (
     <tr className="border-b border-gray-200 last:border-b-0">
-        <td className="py-2 px-4 text-gray-800">{task.name}</td>
+        <td className="py-2 px-4 text-black">{task.name}</td>
         <td className="py-2 px-4 text-center text-gray-600">{task.estimateHours}</td>
         <td className="py-2 px-4 text-center text-gray-600">${task.estimateCost?.toFixed(2)}</td>
-        <td className="py-2 px-4 text-center font-semibold text-gray-800">${calculateTaskCost(task).toFixed(2)}</td>
+        <td className="py-2 px-4 text-center font-semibold text-black">${calculateTaskCost(task).toFixed(2)}</td>
     </tr>
 );
 
@@ -20,10 +20,10 @@ interface SectionViewProps {
 
 const SectionView: React.FC<SectionViewProps> = ({ section }) => {
     return (
-        <div className="mt-4 pt-4 border-t border-gray-200 space-y-4">
+        <div className="mt-4 pt-4 border-t border-black space-y-4">
             <h2 className="text-xl font-bold text-gray-700">Section Content</h2>
             {section.content.map(contentItem => (
-                <div key={contentItem.categoryId} className="border border-gray-200 rounded-md">
+                <div key={contentItem.categoryId} className="border border-black rounded-md">
                     <div className="p-3 bg-gray-50/50 border-b">
                         <h4 className="text-lg font-semibold text-gray-700">{contentItem.name}</h4>
                     </div>

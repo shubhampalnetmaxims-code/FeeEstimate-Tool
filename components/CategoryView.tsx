@@ -7,10 +7,10 @@ interface CategoryViewProps {
 
 const CategoryView: React.FC<CategoryViewProps> = ({ category }) => {
     return (
-        <div className="mt-4 pt-4 border-t border-gray-200 space-y-4">
+        <div className="mt-4 pt-4 border-t border-black space-y-4">
             <h2 className="text-xl font-bold text-gray-700">Tasks</h2>
             {category.tasks.length > 0 ? (
-                <ul className="list-disc list-inside space-y-1 text-gray-800">
+                <ul className="list-disc list-inside space-y-1 text-black">
                     {category.tasks.map(task => <li key={task.id}>{task.name}</li>)}
                 </ul>
             ) : (
@@ -25,7 +25,7 @@ const CategoryView: React.FC<CategoryViewProps> = ({ category }) => {
                             <div key={sub.id} className="p-3 bg-gray-50 rounded-md border">
                                 <h3 className="font-semibold text-gray-700">{sub.name}</h3>
                                 {sub.tasks.length > 0 ? (
-                                    <ul className="list-disc list-inside space-y-1 text-gray-800 mt-1 pl-4">
+                                    <ul className="list-disc list-inside space-y-1 text-black mt-1 pl-4">
                                         {sub.tasks.map(task => <li key={task.id}>{task.name}</li>)}
                                     </ul>
                                 ) : (

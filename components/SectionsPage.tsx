@@ -56,26 +56,26 @@ const SectionsPage: React.FC<SectionsPageProps> = ({ categories, setCategories, 
             )}
 
             <div className="flex justify-between items-center">
-                 <h2 className="text-2xl font-bold text-gray-800">Sections</h2>
-                <button onClick={() => setModal({ type: 'ADD_SECTION' })} className="flex items-center space-x-2 bg-[#5F716B] text-white font-semibold px-4 py-2 rounded-lg hover:bg-[#4E5C57] transition-colors">
+                 <h2 className="text-2xl font-bold text-black">Sections</h2>
+                <button onClick={() => setModal({ type: 'ADD_SECTION' })} className="flex items-center space-x-2 bg-black text-white font-semibold px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">
                     <PlusIcon />
                     <span>Add Section</span>
                 </button>
             </div>
             
-            <div className="bg-white rounded-lg shadow-md border border-gray-200">
-                 <ul className="divide-y divide-gray-200">
+            <div className="bg-white rounded-lg shadow-md border border-black">
+                 <ul className="divide-y divide-black">
                     {sections.map(section => (
                          <li key={section.id} className="p-4 group">
                              <div className="flex justify-between items-center">
                                 <div className="flex-1 cursor-pointer" onClick={() => handleToggleExpand(section.id)}>
-                                    <p className="font-semibold text-gray-800 group-hover:text-[#5F716B]">{section.name}</p>
-                                    <p className="text-sm text-gray-500 truncate">{section.description}</p>
+                                    <p className="font-semibold text-black group-hover:text-gray-700">{section.name}</p>
+                                    <p className="text-sm text-gray-600 truncate">{section.description}</p>
                                 </div>
                                 <div className="flex items-center space-x-2">
                                     <button onClick={() => handleToggleExpand(section.id)} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="View"><EyeIcon className="h-5 w-5"/></button>
                                     <button onClick={() => setModal({ type: 'EDIT_SECTION', payload: section })} className="p-2 text-gray-500 hover:bg-gray-100 rounded-md" title="Edit"><PencilIcon className="h-5 w-5"/></button>
-                                    <button onClick={() => handleDeleteRequest(section)} className="p-2 text-gray-500 hover:bg-red-100 hover:text-red-600 rounded-md" title="Delete"><TrashIcon className="h-5 w-5"/></button>
+                                    <button onClick={() => handleDeleteRequest(section)} className="p-2 text-gray-500 hover:bg-gray-200 hover:text-black rounded-md" title="Delete"><TrashIcon className="h-5 w-5"/></button>
                                 </div>
                             </div>
                             {expandedSectionId === section.id && <SectionView section={section} />}

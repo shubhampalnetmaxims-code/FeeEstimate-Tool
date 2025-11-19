@@ -52,27 +52,27 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onShowCustomerPortal, on
     <form onSubmit={handleLoginSubmit} className="space-y-6">
       <div className="relative">
         <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-          <MailIcon className="h-5 w-5 text-gray-400" />
+          <MailIcon className="h-5 w-5 text-black" />
         </span>
         <input
           type="email"
           placeholder="Email Address"
           value={loginEmail}
           onChange={(e) => setLoginEmail(e.target.value)}
-          className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] focus:border-transparent transition duration-300"
+          className="w-full pl-10 pr-4 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition duration-300"
           required
         />
       </div>
       <div className="relative">
         <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-          <LockIcon className="h-5 w-5 text-gray-400" />
+          <LockIcon className="h-5 w-5 text-black" />
         </span>
         <input
           type={showPassword ? 'text' : 'password'}
           placeholder="Password"
           value={loginPassword}
           onChange={(e) => setLoginPassword(e.target.value)}
-          className="w-full pl-10 pr-10 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] focus:border-transparent transition duration-300"
+          className="w-full pl-10 pr-10 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition duration-300"
           required
         />
         <button
@@ -82,9 +82,9 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onShowCustomerPortal, on
           aria-label={showPassword ? "Hide password" : "Show password"}
         >
           {showPassword ? (
-            <EyeSlashIcon className="h-5 w-5 text-gray-400" />
+            <EyeSlashIcon className="h-5 w-5 text-black" />
           ) : (
-            <EyeIcon className="h-5 w-5 text-gray-400" />
+            <EyeIcon className="h-5 w-5 text-black" />
           )}
         </button>
       </div>
@@ -92,14 +92,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onShowCustomerPortal, on
       <div>
         <button
           type="submit"
-          className="w-full bg-[#5F716B] text-white font-semibold py-3 rounded-lg hover:bg-[#4E5C57] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5F716B] transition-all duration-300 ease-in-out transform hover:scale-105"
+          className="w-full bg-black text-white font-semibold py-3 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out transform hover:scale-105"
         >
           Login
         </button>
       </div>
-       <p className="text-sm text-center">
+       <p className="text-sm text-center text-black">
           Don't have a coach account?{' '}
-          <button type="button" onClick={() => setView('signup')} className="font-medium text-[#5F716B] hover:text-[#4E5C57] underline">
+          <button type="button" onClick={() => setView('signup')} className="font-medium text-black hover:text-gray-700 underline">
               Sign Up
           </button>
       </p>
@@ -109,32 +109,32 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onShowCustomerPortal, on
   const SignUpView = (
     <form onSubmit={handleSignUpSubmit} className="space-y-4">
       <div className="relative">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3"><UserIcon className="h-5 w-5 text-gray-400" /></span>
-          <input type="text" placeholder="Full Name" value={signupName} onChange={e => setSignupName(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3"><UserIcon className="h-5 w-5 text-black" /></span>
+          <input type="text" placeholder="Full Name" value={signupName} onChange={e => setSignupName(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black" required />
       </div>
       <div className="relative">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3"><MailIcon className="h-5 w-5 text-gray-400" /></span>
-          <input type="email" placeholder="Email Address" value={signupEmail} onChange={e => setSignupEmail(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3"><MailIcon className="h-5 w-5 text-black" /></span>
+          <input type="email" placeholder="Email Address" value={signupEmail} onChange={e => setSignupEmail(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black" required />
       </div>
       <div className="relative">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3"><LockIcon className="h-5 w-5 text-gray-400" /></span>
-          <input type="password" placeholder="Password" value={signupPassword} onChange={e => setSignupPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3"><LockIcon className="h-5 w-5 text-black" /></span>
+          <input type="password" placeholder="Password" value={signupPassword} onChange={e => setSignupPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black" required />
       </div>
       <div className="relative">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3"><LockIcon className="h-5 w-5 text-gray-400" /></span>
-          <input type="password" placeholder="Confirm Password" value={signupConfirmPassword} onChange={e => setSignupConfirmPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-gray-200 rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-[#8E9B9A]" required />
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3"><LockIcon className="h-5 w-5 text-black" /></span>
+          <input type="password" placeholder="Confirm Password" value={signupConfirmPassword} onChange={e => setSignupConfirmPassword(e.target.value)} className="w-full pl-10 pr-4 py-3 bg-white border border-black rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-black" required />
       </div>
       <div className="pt-2">
         <button
             type="submit"
-            className="w-full bg-[#5F716B] text-white font-semibold py-3 rounded-lg hover:bg-[#4E5C57] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#5F716B] transition-all duration-300 ease-in-out transform hover:scale-105"
+            className="w-full bg-black text-white font-semibold py-3 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out transform hover:scale-105"
         >
           Create Account
         </button>
       </div>
-      <p className="text-sm text-center">
+      <p className="text-sm text-center text-black">
           Already have an account?{' '}
-          <button type="button" onClick={() => setView('login')} className="font-medium text-[#5F716B] hover:text-[#4E5C57] underline">
+          <button type="button" onClick={() => setView('login')} className="font-medium text-black hover:text-gray-700 underline">
               Login
           </button>
       </p>
@@ -145,26 +145,26 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin, onShowCustomerPortal, on
     <main className="relative min-h-screen w-full flex items-center justify-center p-4">
       <button
         onClick={onShowCustomerPortal}
-        className="absolute top-4 right-4 flex items-center space-x-2 bg-white text-gray-700 font-semibold px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors shadow-sm z-10"
+        className="absolute top-4 right-4 flex items-center space-x-2 bg-white text-black font-semibold px-4 py-2 rounded-lg border border-black hover:bg-gray-100 transition-colors shadow-sm z-10"
       >
         <UserCircleIcon className="h-5 w-5" />
         <span>Customer Portal</span>
       </button>
 
       <div className="w-full max-w-md">
-        <div className="bg-white shadow-2xl rounded-2xl p-8 md:p-12 space-y-6 border border-gray-200">
+        <div className="bg-white shadow-lg rounded-2xl p-8 md:p-12 space-y-6 border border-black">
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h1 className="text-3xl font-bold text-black">
               {view === 'login' ? "Designer's Hub" : "Coach Sign Up"}
             </h1>
-            <p className="text-gray-500 mt-2">
+            <p className="text-gray-600 mt-2">
               {view === 'login' ? 'Welcome back to your creative space' : 'Create your professional account'}
             </p>
           </div>
 
           {view === 'login' ? LoginView : SignUpView}
           
-          <p className="text-center text-xs text-gray-400 mt-6">
+          <p className="text-center text-xs text-gray-500 mt-6">
             © {new Date().getFullYear()} Interior Creations Inc. All rights reserved.
           </p>
         </div>

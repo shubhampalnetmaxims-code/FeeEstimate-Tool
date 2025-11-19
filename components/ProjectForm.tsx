@@ -46,6 +46,14 @@ const calculateOverallTotal = (project: Project) => {
     return project.stages.reduce((total, stage) => total + calculateStageTotal(stage), 0);
 };
 
+const designSpaces = ["Living Room", "Kitchen", "Master Bedroom", "Guest Bedroom", "Bathroom", "Home Office", "Dining Room", "Entryway", "Basement", "Outdoor Space", "Laundry", "Walk-in Closet", "Powder Room", "Family Room", "Study", "Media Room"];
+
+const qualityLevels: Record<string, string> = { 
+    'Standard': 'Quality finishes with practical solutions', 
+    'Premium': 'High-end finishes with custom elements', 
+    'Luxury': 'Luxury finishes with bespoke solutions' 
+};
+
 
 const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel, categories, sections, projectTypes, isCustomerView = false }) => {
     const [project, setProject] = useState<Project>(
@@ -56,11 +64,20 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
             projectType: '',
             projectDescription: '',
             stages: [],
+            spaces: [],
         }
     );
 
-    const handleInputChange = (field: keyof Project, value: string) => {
+    const handleInputChange = (field: keyof Project, value: string | number | string[] | undefined) => {
         setProject(p => ({ ...p, [field]: value }));
+    };
+
+    const handleSpaceChange = (space: string) => {
+        const currentSpaces = project.spaces || [];
+        const newSpaces = currentSpaces.includes(space)
+            ? currentSpaces.filter(s => s !== space)
+            : [...currentSpaces, space];
+        handleInputChange('spaces', newSpaces);
     };
     
     const handleAddStage = () => {
@@ -289,22 +306,22 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
     const TaskRow = ({ task, onTaskChange, onDeleteTask }: { task: SectionTask, onTaskChange: (field: keyof SectionTask, value: any) => void, onDeleteTask: () => void }) => (
         <div className="grid grid-cols-12 gap-2 items-center p-2 rounded-md hover:bg-gray-50">
             <div className="col-span-4">
-                <input type="text" value={task.name} onChange={e => onTaskChange('name', e.target.value)} className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm bg-white text-gray-900" placeholder="Task Name"/>
+                <input type="text" value={task.name} onChange={e => onTaskChange('name', e.target.value)} className="w-full px-2 py-1 border border-black rounded-md text-sm bg-white text-black" placeholder="Task Name"/>
             </div>
             <div className="col-span-2">
-                 <input type="number" min="0" value={task.estimateHours ?? ''} onChange={e => onTaskChange('estimateHours', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-center bg-white text-gray-900" placeholder="Hours"/>
+                 <input type="number" min="0" value={task.estimateHours ?? ''} onChange={e => onTaskChange('estimateHours', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-black rounded-md text-sm text-center bg-white text-black" placeholder="Hours"/>
             </div>
             <div className="col-span-2">
-                <input type="number" min="0" value={task.estimateCost ?? ''} onChange={e => onTaskChange('estimateCost', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-center bg-white text-gray-900" placeholder="Cost"/>
+                <input type="number" min="0" value={task.estimateCost ?? ''} onChange={e => onTaskChange('estimateCost', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-black rounded-md text-sm text-center bg-white text-black" placeholder="Cost"/>
             </div>
             <div className="col-span-2">
-                <input type="number" min="0" value={task.actualHours ?? ''} onChange={e => onTaskChange('actualHours', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-gray-300 rounded-md text-sm text-center bg-white text-gray-900" placeholder="Hours"/>
+                <input type="number" min="0" value={task.actualHours ?? ''} onChange={e => onTaskChange('actualHours', handleNumericInputChange(e.target.value))} className="w-full px-2 py-1 border border-black rounded-md text-sm text-center bg-white text-black" placeholder="Hours"/>
             </div>
-            <div className="col-span-1 text-center font-semibold text-sm text-gray-800">
+            <div className="col-span-1 text-center font-semibold text-sm text-black">
                 ${calculateTaskTotal(task).toFixed(2)}
             </div>
             <div className="col-span-1 justify-self-center">
-                <button onClick={onDeleteTask} className="p-1 text-red-500 hover:text-red-700"><TrashIcon/></button>
+                <button onClick={onDeleteTask} className="p-1 text-black hover:text-gray-700"><TrashIcon/></button>
             </div>
        </div>
     );
@@ -312,30 +329,30 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
     return (
         <div className="space-y-6 pb-24">
             <header className="mb-8">
-                 <h1 className="text-3xl font-bold text-gray-800">
-                    {initialData ? 'Edit Project Template' : 'Create New Project Template'}
+                 <h1 className="text-3xl font-bold text-black">
+                    {initialData?.id ? `Edit ${isCustomerView ? 'Project' : 'Template'}` : `Create New ${isCustomerView ? 'Project' : 'Template'}`}
                  </h1>
             </header>
-            <div className="bg-white p-8 rounded-lg shadow-md border border-gray-200 space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-white p-8 rounded-lg shadow-md border border-black space-y-6">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Template Name *</label>
-                        <input type="text" value={project.name} onChange={e => handleInputChange('name', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900" />
+                        <label className="block text-sm font-medium text-gray-700 mb-1">{isCustomerView ? 'Project' : 'Template'} Name *</label>
+                        <input type="text" value={project.name} onChange={e => handleInputChange('name', e.target.value)} className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black" />
                     </div>
-                    <div>
+                     <div>
                          <label className="block text-sm font-medium text-gray-700 mb-1">Project Type</label>
                         {isCustomerView ? (
                             <input 
                                 type="text" 
                                 value={project.projectType} 
                                 readOnly
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-gray-100 text-gray-700 cursor-not-allowed" 
+                                className="w-full px-3 py-2 border border-black rounded-md shadow-sm bg-gray-100 text-gray-700 cursor-not-allowed" 
                             />
                         ) : projectTypes ? (
                              <select
                                 value={project.projectType}
-                                onChange={e => handleInputChange('projectType', e.target.value)}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900"
+                                onChange={e => handleInputChange('projectType', e.target.value as string)}
+                                className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
                             >
                                 <option value="">-- Select a project type --</option>
                                 {projectTypes.map(pt => (
@@ -346,39 +363,99 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                             <input 
                                 type="text" 
                                 value={project.projectType} 
-                                onChange={e => handleInputChange('projectType', e.target.value)} 
-                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900" 
+                                onChange={e => handleInputChange('projectType', e.target.value as string)} 
+                                className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black" 
                             />
                         )}
                     </div>
                 </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Budget (USD)</label>
+                        <div className="flex items-center space-x-2">
+                            <input type="number" placeholder="Min" value={project.budgetMin ?? ''} onChange={e => handleInputChange('budgetMin', handleNumericInputChange(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
+                            <span className="text-gray-500">to</span>
+                            <input type="number" placeholder="Max" value={project.budgetMax ?? ''} onChange={e => handleInputChange('budgetMax', handleNumericInputChange(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Timeline (Weeks)</label>
+                        <div className="flex items-center space-x-2">
+                             <input type="number" placeholder="Min" value={project.timelineMin ?? ''} onChange={e => handleInputChange('timelineMin', handleNumericInputChange(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
+                            <span className="text-gray-500">to</span>
+                            <input type="number" placeholder="Max" value={project.timelineMax ?? ''} onChange={e => handleInputChange('timelineMax', handleNumericInputChange(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Total Area (sq ft)</label>
+                        <input type="number" value={project.totalArea ?? ''} onChange={e => handleInputChange('totalArea', handleNumericInputChange(e.target.value))} className="w-full px-3 py-2 border border-black rounded-md bg-white text-black"/>
+                    </div>
+                     <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Quality Level</label>
+                        <select
+                            value={project.qualityLevel || ''}
+                            onChange={e => handleInputChange('qualityLevel', e.target.value as Project['qualityLevel'])}
+                            className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black"
+                        >
+                            <option value="" disabled>-- Select a level --</option>
+                            {Object.entries(qualityLevels).map(([level, desc]) => (
+                                <option key={level} value={level}>{level}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
+                
+                 <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Spaces to be Designed</label>
+                    <div className="p-3 border border-black rounded-md max-h-48 overflow-y-auto">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                            {designSpaces.map(space => (
+                                <label key={space} className="flex items-center space-x-2 text-sm text-black">
+                                    <input
+                                        type="checkbox"
+                                        checked={(project.spaces || []).includes(space)}
+                                        onChange={() => handleSpaceChange(space)}
+                                        className="bg-white rounded text-black focus:ring-black border-black"
+                                    />
+                                    <span>{space}</span>
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+
+
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Client Address</label>
-                    <input type="text" value={project.clientAddress} onChange={e => handleInputChange('clientAddress', e.target.value)} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900" />
+                    <input type="text" value={project.clientAddress} onChange={e => handleInputChange('clientAddress', e.target.value as string)} className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black" />
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Project Description</label>
-                    <textarea value={project.projectDescription} onChange={e => handleInputChange('projectDescription', e.target.value)} rows={3} className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8E9B9A] bg-white text-gray-900" />
+                    <textarea value={project.projectDescription} onChange={e => handleInputChange('projectDescription', e.target.value as string)} rows={3} className="w-full px-3 py-2 border border-black rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-black bg-white text-black" />
                 </div>
             </div>
 
             <div className="space-y-4">
-                 <h2 className="text-2xl font-bold text-gray-800">Stages</h2>
+                 <h2 className="text-2xl font-bold text-black">Stages</h2>
                  {project.stages.map(stage => (
-                     <div key={stage.id} className="bg-white p-6 rounded-lg shadow-md border border-gray-200 space-y-4">
+                     <div key={stage.id} className="bg-white p-6 rounded-lg shadow-md border border-black space-y-4">
                          <div className="flex justify-between items-center pb-2 border-b">
-                             <input type="text" value={stage.name} onChange={e => handleStageChange(stage.id, e.target.value)} className="text-2xl font-bold text-gray-800 bg-white focus:outline-none focus:bg-gray-50 p-1 rounded-md w-full" />
+                             <input type="text" value={stage.name} onChange={e => handleStageChange(stage.id, e.target.value)} className="text-2xl font-bold text-black bg-white focus:outline-none focus:bg-gray-50 p-1 rounded-md w-full" />
                               <div className="flex items-center space-x-4">
                                 <div className="text-right">
                                     <p className="text-sm font-medium text-gray-500">Stage Total</p>
-                                    <p className="text-2xl font-bold text-gray-800">${calculateStageTotal(stage).toFixed(2)}</p>
+                                    <p className="text-2xl font-bold text-black">${calculateStageTotal(stage).toFixed(2)}</p>
                                 </div>
-                                <button onClick={() => handleDeleteStage(stage.id)} className="p-2 text-gray-500 hover:bg-red-100 hover:text-red-600 rounded-md"><TrashIcon className="h-5 w-5"/></button>
+                                <button onClick={() => handleDeleteStage(stage.id)} className="p-2 text-gray-500 hover:bg-gray-200 hover:text-black rounded-md"><TrashIcon className="h-5 w-5"/></button>
                               </div>
                          </div>
                          <div className="space-y-4">
                             {stage.sections.map(section => (
-                                <div key={section.id} className="border border-gray-200 rounded-md p-4">
+                                <div key={section.id} className="border border-black rounded-md p-4">
                                      <div className="flex justify-between items-start">
                                         <div>
                                             <h3 className="text-lg font-semibold text-gray-700">{section.name}</h3>
@@ -387,11 +464,11 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                                         <div className="flex items-start space-x-2">
                                             <div className="text-right flex-shrink-0">
                                                 <p className="text-sm font-medium text-gray-500">Section Total</p>
-                                                <p className="text-xl font-bold text-gray-800">${calculateSectionTotal(section).toFixed(2)}</p>
+                                                <p className="text-xl font-bold text-black">${calculateSectionTotal(section).toFixed(2)}</p>
                                             </div>
                                             <button 
                                                 onClick={() => handleDeleteSectionFromStage(stage.id, section.id)} 
-                                                className="p-2 text-gray-500 hover:bg-red-100 hover:text-red-600 rounded-md"
+                                                className="p-2 text-gray-500 hover:bg-gray-200 hover:text-black rounded-md"
                                                 title={`Delete section ${section.name}`}
                                             >
                                                 <TrashIcon className="h-5 w-5"/>
@@ -402,7 +479,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                                          <div key={contentItem.categoryId} className="mt-2">
                                               <div className="flex justify-between items-center">
                                                 <h4 className="font-semibold text-gray-600">{contentItem.name}</h4>
-                                                <button onClick={() => handleDeleteCategoryFromSection(stage.id, section.id, contentItem.categoryId)} className="p-1 text-red-500 hover:bg-red-100 rounded-md" title={`Remove ${contentItem.name} category`}>
+                                                <button onClick={() => handleDeleteCategoryFromSection(stage.id, section.id, contentItem.categoryId)} className="p-1 text-black hover:bg-gray-200 rounded-md" title={`Remove ${contentItem.name} category`}>
                                                     <TrashIcon className="h-4 w-4"/>
                                                 </button>
                                             </div>
@@ -424,7 +501,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                                                         onDeleteTask={() => handleDeleteTask(stage.id, section.id, contentIdx, task.id, null)}
                                                      />
                                                  ))}
-                                                 <button onClick={() => handleAddTask(stage.id, section.id, contentIdx, null)} className="text-sm font-medium text-[#5F716B] hover:text-[#4E5C57]">+ Add Task</button>
+                                                 <button onClick={() => handleAddTask(stage.id, section.id, contentIdx, null)} className="text-sm font-medium text-black hover:text-gray-700">+ Add Task</button>
                                              </div>
 
                                               {contentItem.subcategories.map((sub, subIdx) => (
@@ -439,7 +516,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                                                                 onDeleteTask={() => handleDeleteTask(stage.id, section.id, contentIdx, task.id, subIdx)}
                                                              />
                                                          ))}
-                                                         <button onClick={() => handleAddTask(stage.id, section.id, contentIdx, subIdx)} className="text-sm font-medium text-[#5F716B] hover:text-[#4E5C57]">+ Add Task</button>
+                                                         <button onClick={() => handleAddTask(stage.id, section.id, contentIdx, subIdx)} className="text-sm font-medium text-black hover:text-gray-700">+ Add Task</button>
                                                      </div>
                                                  </div>
                                               ))}
@@ -454,7 +531,7 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                                                 e.target.value = "";
                                             }}
                                             value=""
-                                            className="text-sm bg-white text-gray-900 border border-gray-300 rounded-md focus:ring-[#8E9B9A] focus:border-[#8E9B9A]"
+                                            className="text-sm bg-white text-black border border-black rounded-md focus:ring-black focus:border-black"
                                         >
                                             <option value="" disabled>-- Add category to section --</option>
                                             {categories
@@ -469,29 +546,29 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ initialData, onSave, onCancel
                             ))}
                          </div>
                          <div>
-                            <select onChange={e => {handleAddSectionToStage(stage.id, e.target.value); e.target.value = ""}} value="" className="mt-2 text-sm bg-white text-gray-900 border-gray-300 rounded-md focus:ring-[#8E9B9A] focus:border-[#8E9B9A]">
+                            <select onChange={e => {handleAddSectionToStage(stage.id, e.target.value); e.target.value = ""}} value="" className="mt-2 text-sm bg-white text-black border-black rounded-md focus:ring-black focus:border-black">
                                 <option value="" disabled>-- Add a section from templates --</option>
                                 {sections.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                             </select>
                          </div>
                      </div>
                  ))}
-                 <button onClick={handleAddStage} className="flex items-center space-x-2 bg-gray-200 text-gray-800 font-semibold px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+                 <button onClick={handleAddStage} className="flex items-center space-x-2 bg-white text-black border border-black font-semibold px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
                      <PlusIcon />
                      <span>Add Stage</span>
                  </button>
             </div>
 
-            <div className="sticky bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-gray-200 z-10">
+            <div className="sticky bottom-0 left-0 right-0 bg-white/80 backdrop-blur-sm border-t border-black z-10">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                      <div className="flex justify-between items-center py-4">
                         <div className="text-right flex-1">
                             <p className="text-lg font-medium text-gray-600">Overall Project Total</p>
-                            <p className="text-3xl font-bold text-gray-900">${calculateOverallTotal(project).toFixed(2)}</p>
+                            <p className="text-3xl font-bold text-black">${calculateOverallTotal(project).toFixed(2)}</p>
                         </div>
                         <div className="flex items-center ml-8">
-                            <button onClick={onCancel} className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-md mr-2 hover:bg-gray-50">Cancel</button>
-                            <button onClick={handleSubmit} className="px-6 py-2 text-white bg-[#5F716B] rounded-md hover:bg-[#4E5C57]">Save</button>
+                            <button onClick={onCancel} className="px-4 py-2 text-black bg-white border border-black rounded-md mr-2 hover:bg-gray-100">Cancel</button>
+                            <button onClick={handleSubmit} className="px-6 py-2 text-white bg-black rounded-md hover:bg-gray-800">Save</button>
                         </div>
                     </div>
                 </div>
